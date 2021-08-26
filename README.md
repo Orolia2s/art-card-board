@@ -1,2 +1,2 @@
 # art-card-board
-Project hosting schematics and production files
+Project hosting schematics production files and firmware

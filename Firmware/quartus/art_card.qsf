@@ -1,0 +1,134 @@
+set_global_assignment -name FAMILY "Cyclone 10 GX"
+set_global_assignment -name TOP_LEVEL_ENTITY art_card_Top
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 20.3.0
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "16:51:31  DECEMBER 05, 2020"
+set_global_assignment -name LAST_QUARTUS_VERSION "21.1.0 Pro Edition"
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP "-40"
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 100
+set_global_assignment -name DEVICE 10CX105YF672I5G
+set_global_assignment -name DEVICE_FILTER_PACKAGE FBGA
+set_global_assignment -name DEVICE_FILTER_PIN_COUNT 672
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
+set_instance_assignment -name PARTITION_COLOUR 4288581631 -to art_card_Top -entity art_card_Top
+set_global_assignment -name STRATIXV_CONFIGURATION_SCHEME "ACTIVE SERIAL X4"
+set_global_assignment -name RESERVE_DATA0_AFTER_CONFIGURATION "USE AS REGULAR IO"
+set_global_assignment -name FLOW_ENABLE_INTERACTIVE_TIMING_ANALYZER OFF
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "15 MM HEAT SINK WITH STILL AIR"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name POWER_USE_TA_VALUE 50
+set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 5
+
+
+#####################################################################################################################
+# PCIe Clock Input
+set_location_assignment PIN_U22 -to PCIE_CLK_REF
+set_instance_assignment -name IO_STANDARD HCSL -to PCIE_CLK_REF -entity art_card_Top
+set_instance_assignment -name XCVR_C10_REFCLK_TERM_TRISTATE TRISTATE_ON -to PCIE_CLK_REF
+
+#####################################################################################################################
+#RX_PIN settings
+set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 0_9V -to PCIE_RX
+set_instance_assignment -name XCVR_C10_RX_TERM_SEL R_R1 -to PCIE_RX
+set_instance_assignment -name XCVR_C10_RX_EQ_DC_GAIN_TRIM NO_DC_GAIN -to PCIE_RX
+set_instance_assignment -name IO_STANDARD "CURRENT MODE LOGIC (CML)" -to PCIE_RX[0]
+set_instance_assignment -name IO_STANDARD "CURRENT MODE LOGIC (CML)" -to PCIE_RX[1]
+set_instance_assignment -name IO_STANDARD "CURRENT MODE LOGIC (CML)" -to PCIE_RX[2]
+set_instance_assignment -name IO_STANDARD "CURRENT MODE LOGIC (CML)" -to PCIE_RX[3]
+set_instance_assignment -name XCVR_C10_RX_ADP_CTLE_ACGAIN_4S RADP_CTLE_ACGAIN_4S_1 -to PCIE_RX
+set_instance_assignment -name XCVR_C10_RX_ADP_VGA_SEL RADP_VGA_SEL_4 -to PCIE_RX
+set_instance_assignment -name XCVR_C10_RX_ONE_STAGE_ENABLE NON_S1_MODE -to PCIE_RX
+
+#####################################################################################################################
+#TX_PIN settings
+set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to PCIE_TX -entity art_card_Top
+set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 0_9V -to PCIE_TX
+set_instance_assignment -name XCVR_C10_TX_COMPENSATION_EN DISABLE -to PCIE_TX -entity art_card_Top
+set_instance_assignment -name XCVR_C10_TX_SLEW_RATE_CTRL SLEW_R5 -to PCIE_TX
+
+# PCIe Pin Location
+set_location_assignment PIN_U26 -to PCIE_TX[0]
+set_location_assignment PIN_U25 -to "PCIE_TX[0](n)"
+set_location_assignment PIN_R26 -to PCIE_TX[1]
+set_location_assignment PIN_R25 -to "PCIE_TX[1](n)"
+set_location_assignment PIN_N26 -to PCIE_TX[2]
+set_location_assignment PIN_N25 -to "PCIE_TX[2](n)"
+set_location_assignment PIN_L26 -to PCIE_TX[3]
+set_location_assignment PIN_L25 -to "PCIE_TX[3](n)"
+set_location_assignment PIN_T24 -to PCIE_RX[0]
+set_location_assignment PIN_P24 -to PCIE_RX[1]
+set_location_assignment PIN_P23 -to "PCIE_RX[1](n)"
+set_location_assignment PIN_M24 -to PCIE_RX[2]
+set_location_assignment PIN_M23 -to "PCIE_RX[2](n)"
+set_location_assignment PIN_K24 -to PCIE_RX[3]
+set_location_assignment PIN_K23 -to "PCIE_RX[3](n)"
+set_location_assignment PIN_AB8 -to PCIE_PIN_PERSTn
+set_location_assignment PIN_AF18 -to PCIE_WAKEn
+
+# Standard IO
+set_location_assignment PIN_V1 -to LED[0]
+set_location_assignment PIN_U1 -to LED[1]
+set_location_assignment PIN_T1 -to LED[2]
+set_location_assignment PIN_R1 -to LED[3]
+set_location_assignment PIN_A19 -to OSC_BITE
+set_location_assignment PIN_A18 -to OSC_PPS_IN
+set_location_assignment PIN_A17 -to OSC_PPS_OUT
+set_location_assignment PIN_A16 -to OSC_SCL
+set_location_assignment PIN_A14 -to OSC_SDA
+set_location_assignment PIN_A13 -to DAC_CLK
+set_location_assignment PIN_A12 -to DAC_CSN
+set_location_assignment PIN_A11 -to DAC_MOSI
+set_location_assignment PIN_N1 -to DCLS_OUT[0]
+set_location_assignment PIN_M1 -to DCLS_OUT[1]
+set_location_assignment PIN_AF3 -to UART_GNSS_RX
+set_location_assignment PIN_AF4 -to UART_GNSS_TX
+set_location_assignment PIN_A9 -to UART_OSC_RX
+set_location_assignment PIN_A8 -to UART_OSC_TX
+set_location_assignment PIN_AF19 -to CLK_25M
+set_location_assignment PIN_A6 -to CLK_OSC
+set_location_assignment PIN_AF6 -to GNSS_PPS
+set_location_assignment PIN_AF11 -to ID[0]
+set_location_assignment PIN_AF12 -to ID[1]
+set_location_assignment PIN_AF13 -to ID[2]
+set_location_assignment PIN_AF14 -to ID[3]
+set_location_assignment PIN_F1 -to GPIO[0]
+set_location_assignment PIN_E1 -to GPIO[1]
+set_location_assignment PIN_C1 -to GPIO[2]
+set_location_assignment PIN_B1 -to GPIO[3]
+set_location_assignment PIN_AF16 -to EEPROM_SDA
+set_location_assignment PIN_AF17 -to EEPROM_SCL
+set_global_assignment -name PRESERVE_UNUSED_XCVR_CHANNEL ON
+set_location_assignment PIN_AF7 -to DCLS_IN
+set_global_assignment -name PROJECT_IP_REGENERATION_POLICY NEVER_REGENERATE_IP
+set_global_assignment -name ENABLE_SIGNALTAP OFF
+set_global_assignment -name USE_SIGNALTAP_FILE stp1.stp
+set_global_assignment -name ENABLE_AUTONOMOUS_PCIE_HIP ON
+set_global_assignment -name CVP_CONFDONE_OPEN_DRAIN OFF
+set_location_assignment PIN_AF8 -to FREQ_IN
+set_global_assignment -name SDC_FILE art_card.sdc
+set_global_assignment -name VHDL_FILE ../hdl/art_card_Top.vhd
+set_global_assignment -name IP_FILE ../hdl/unique_id.ip
+set_global_assignment -name QSYS_FILE art_card_pd.qsys
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_clock_in.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_pcie_a10_hip_0.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_pcie_irq_msi_0.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_Phasemeter_Ctrl_0.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_PPS_Output_Ctrl_0.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_mRO50_0.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_phy2sys_0.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_clock_bridge_1.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_iopll_0.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_clock_bridge_2.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_clock_bridge_0.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_reset_bridge_1.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/gnss_uart.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/gnss_clock_domain.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/ConfigFlash.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/spi_flash.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/spi_dac.ip
+set_global_assignment -name SIGNALTAP_FILE stp1.stp
+set_global_assignment -name IP_FILE ip/art_card_pd/pll_50m.ip
+set_global_assignment -name PRESERVE_FOR_DEBUG_ENABLE ON
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_i2c_opencores_0.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_PPS_Output_Ctrl_1.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_PPS_Output_Ctrl_2.ip
