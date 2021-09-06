@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- 
+--
 -- art_card_Top : Top level of the ART_CARD FGPA.
 -- Copyright (C) 2021  Spectracom SAS
 --
@@ -14,7 +14,7 @@
 -- You should have received a copy of the GNU Lesser General Public
 -- License along with this library; if not, write to the Free Software
 -- Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
--- 
+--
 --------------------------------------------------------------------------------
 
 library ieee;
@@ -171,6 +171,7 @@ architecture rtl of art_card_Top is
     signal pps_gnss_200: std_logic;
     signal pps_gnss_r_200: std_logic;
     signal pulse_gnss: std_logic;
+    signal pulse_gnss_r: std_logic_vector(2 downto 0);
 
 begin
 
@@ -246,7 +247,7 @@ begin
             ts_pps_out_time_ns_o        => internal_time_ns,
 
             -- PPS Output GNSS
-            ppsout_gref_pps_ref         => pulse_gnss,
+            ppsout_gref_pps_ref         => pulse_gnss_r(2),
             ppsout_go_pps_out           => open,
             ts_ppsout_g_time_s_o        => internal_time_s,
             ts_ppsout_g_time_ns_o       => internal_time_ns
@@ -275,7 +276,6 @@ begin
 
     pcie_npor <= por_rstn;
 
-
     -- Register GNSS Pulse in 200MHz
     gnss_pulse_200: process(clk_200m, rst_200m)
     begin
@@ -288,6 +288,17 @@ begin
             pulse_gnss <= pps_gnss_200 and not pps_gnss_r_200;
         end if;
     end process gnss_pulse_200;
+
+    -- delay GNSS Pulse
+    gnss_pulse_del: process(clk_200m, rst_200m)
+    begin
+        if (rst_200m = '1') then
+            pulse_gnss_r <= (others => '0');
+        elsif rising_edge(clk_200m) then
+            pulse_gnss_r <= pulse_gnss_r(1 downto 0) & pulse_gnss;
+        end if;
+    end process gnss_pulse_del;
+
 
     -- LED Assignment
     LED(0) <= GNSS_PPS;
