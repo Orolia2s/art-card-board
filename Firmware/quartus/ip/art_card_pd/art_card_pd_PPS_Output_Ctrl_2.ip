@@ -611,6 +611,7 @@
         <ipxact:fileSetRef>
           <ipxact:localName>QUARTUS_SYNTH</ipxact:localName>
         </ipxact:fileSetRef>
+        <ipxact:parameters></ipxact:parameters>
       </ipxact:componentInstantiation>
     </ipxact:instantiations>
     <ipxact:ports>
@@ -636,6 +637,7 @@
         <ipxact:name>RD_I</ipxact:name>
         <ipxact:wire>
           <ipxact:direction>in</ipxact:direction>
+          <ipxact:vectors></ipxact:vectors>
           <ipxact:wireTypeDefs>
             <ipxact:wireTypeDef>
               <ipxact:typeName>STD_LOGIC</ipxact:typeName>
@@ -648,6 +650,7 @@
         <ipxact:name>WE_I</ipxact:name>
         <ipxact:wire>
           <ipxact:direction>in</ipxact:direction>
+          <ipxact:vectors></ipxact:vectors>
           <ipxact:wireTypeDefs>
             <ipxact:wireTypeDef>
               <ipxact:typeName>STD_LOGIC</ipxact:typeName>
@@ -696,6 +699,7 @@
         <ipxact:name>RST200_I</ipxact:name>
         <ipxact:wire>
           <ipxact:direction>in</ipxact:direction>
+          <ipxact:vectors></ipxact:vectors>
           <ipxact:wireTypeDefs>
             <ipxact:wireTypeDef>
               <ipxact:typeName>STD_LOGIC</ipxact:typeName>
@@ -708,6 +712,7 @@
         <ipxact:name>CLK200_I</ipxact:name>
         <ipxact:wire>
           <ipxact:direction>in</ipxact:direction>
+          <ipxact:vectors></ipxact:vectors>
           <ipxact:wireTypeDefs>
             <ipxact:wireTypeDef>
               <ipxact:typeName>STD_LOGIC</ipxact:typeName>
@@ -720,6 +725,7 @@
         <ipxact:name>CLK_CPU_I</ipxact:name>
         <ipxact:wire>
           <ipxact:direction>in</ipxact:direction>
+          <ipxact:vectors></ipxact:vectors>
           <ipxact:wireTypeDefs>
             <ipxact:wireTypeDef>
               <ipxact:typeName>STD_LOGIC</ipxact:typeName>
@@ -732,6 +738,7 @@
         <ipxact:name>RST_CPU_I</ipxact:name>
         <ipxact:wire>
           <ipxact:direction>in</ipxact:direction>
+          <ipxact:vectors></ipxact:vectors>
           <ipxact:wireTypeDefs>
             <ipxact:wireTypeDef>
               <ipxact:typeName>STD_LOGIC</ipxact:typeName>
@@ -744,6 +751,7 @@
         <ipxact:name>IRQ_PPS_O</ipxact:name>
         <ipxact:wire>
           <ipxact:direction>out</ipxact:direction>
+          <ipxact:vectors></ipxact:vectors>
           <ipxact:wireTypeDefs>
             <ipxact:wireTypeDef>
               <ipxact:typeName>STD_LOGIC</ipxact:typeName>
@@ -756,6 +764,7 @@
         <ipxact:name>PPS_OUT</ipxact:name>
         <ipxact:wire>
           <ipxact:direction>out</ipxact:direction>
+          <ipxact:vectors></ipxact:vectors>
           <ipxact:wireTypeDefs>
             <ipxact:wireTypeDef>
               <ipxact:typeName>STD_LOGIC</ipxact:typeName>
@@ -768,6 +777,7 @@
         <ipxact:name>PPS_REF</ipxact:name>
         <ipxact:wire>
           <ipxact:direction>in</ipxact:direction>
+          <ipxact:vectors></ipxact:vectors>
           <ipxact:wireTypeDefs>
             <ipxact:wireTypeDef>
               <ipxact:typeName>STD_LOGIC</ipxact:typeName>
@@ -851,6 +861,17 @@
           <ipxact:displayName>bonusData</ipxact:displayName>
           <ipxact:value>bonusData 
 {
+   element $system
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone 10 GX";
+         type = "String";
+      }
+   }
+   element PPS_Output_Ctrl_2
+   {
+   }
 }
 </ipxact:value>
         </ipxact:parameter>

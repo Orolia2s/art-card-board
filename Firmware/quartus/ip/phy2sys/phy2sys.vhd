@@ -30,15 +30,11 @@ entity phy2sys is
         CLK200_I        : in    std_logic;
         RST200_I        : in    std_logic;
 
-        ADR_I           : in    std_logic_vector(3 downto 0);
+        ADR_I           : in    std_logic_vector(7 downto 0);
         RD_I            : in    std_logic;
         WE_I            : in    std_logic;
         DAT_I           : in    std_logic_vector(31 downto 0);
         DAT_O           : out   std_logic_vector(31 downto 0);
-
-        OFFSET_PHASE_I  : in    std_logic_vector(31 downto 0);
-        REQUEST_OFFSET_I: in    std_logic;
-        ACK_OFFSET_O    : out   std_logic;
 
         TIME_S_O        : out   std_logic_vector(31 downto 0);
         TIME_NS_O       : out   std_logic_vector(31 downto 0);
@@ -50,23 +46,24 @@ end entity phy2sys;
 
 architecture A_phy2sys of phy2sys is
 
-    constant ADDR_CTRL_C:           std_logic_vector(3 downto 0) := x"0";
-    constant ADDR_STATUS_C:         std_logic_vector(3 downto 0) := x"1";
-    constant ADDR_VERSION_C:        std_logic_vector(3 downto 0) := x"3";
-    constant ADDR_TIME_NS_C:        std_logic_vector(3 downto 0) := x"4";
-    constant ADDR_TIME_SEC_C:       std_logic_vector(3 downto 0) := x"5";
-    constant ADDR_ADJ_TIME_NS_C:    std_logic_vector(3 downto 0) := x"8";
-    constant ADDR_ADJ_TIME_SEC_C:   std_logic_vector(3 downto 0) := x"9";
+    constant ADDR_CTRL_C:           std_logic_vector(7 downto 0) := x"00";
+    constant ADDR_STATUS_C:         std_logic_vector(7 downto 0) := x"01";
+    constant ADDR_VERSION_C:        std_logic_vector(7 downto 0) := x"03";
+    constant ADDR_TIME_NS_C:        std_logic_vector(7 downto 0) := x"04";
+    constant ADDR_TIME_SEC_C:       std_logic_vector(7 downto 0) := x"05";
+    constant ADDR_ADJ_TIME_NS_C:    std_logic_vector(7 downto 0) := x"08";
+    constant ADDR_ADJ_TIME_SEC_C:   std_logic_vector(7 downto 0) := x"09";
+    constant ADDR_OFFSET_TIME_C:    std_logic_vector(7 downto 0) := x"0C";
 
-    constant PHY2SYS_VERSION_C:     std_logic_vector(31 downto 0) := x"00000008";
+    constant PHY2SYS_VERSION_C:     std_logic_vector(31 downto 0) := x"00000009";
 
-    constant PPS_NS_MEGA_C:  signed(31 downto 0) := x"3B9AC9FB"; --999 999 995
-    constant PPS_NS1_MEGA_C: signed(31 downto 0) := x"3B9AC9F6"; --999 999 990
-    --constant PPS_PER_SECOND_200: signed(31 downto 0) := x"0001FFFE"; -- for debug
+    constant PPS_1S_MEGA_C: std_logic_vector(31 downto 0) := x"3B9ACA00"; --1 000 000 000 ns
+    constant PPS_2S_MEGA_C: std_logic_vector(31 downto 0) := x"77359400"; --2 000 000 000 ns
+    constant PPS_NS_MEGA_C: std_logic_vector(31 downto 0) := x"3B9AC9FB"; --  999 999 995 ns
+    constant PPS_NS1_MEGA_C:std_logic_vector(31 downto 0) := x"3B9AC9F6"; --  999 999 990 ns
 
     signal current_sec: unsigned(31 downto 0);
     signal current_ns : signed(31 downto 0);
-    signal current_ns_add: unsigned(31 downto 0);
 
     signal reload_ns:   std_logic;
     signal reload_ns_r: std_logic;
@@ -80,6 +77,11 @@ architecture A_phy2sys of phy2sys is
 
     signal reg_adj_sec: std_logic_vector(31 downto 0);
     signal reg_adj_ns : std_logic_vector(31 downto 0);
+
+    signal reg_offset_time: std_logic_vector(31 downto 0);
+    signal reg_offset_sign: std_logic;
+    signal val_offset_time_ns: unsigned(31 downto 0);
+    signal offset_second: std_logic_vector(1 downto 0);
 
     signal time_adj_done: std_logic;
 
@@ -100,6 +102,7 @@ architecture A_phy2sys of phy2sys is
 
     signal data_out: std_logic_vector(31 downto 0);
 
+    signal request_offset: std_logic;
     signal request_offset_r: std_logic;
     signal ack_offset: std_logic;
 
@@ -111,17 +114,23 @@ begin
         if (RST_CPU_I = '1') then
             data_out <= (others => '0');
             reg_status <= (others => '0');
+            reg_offset_time <= (others => '0');
+            reg_offset_sign <= '0';
             time_read_req <= '0';
             time_adj_req <= '0';
             bit_ctrl_enable <= '0';
             ack_ctrl_done <= '0';
+            request_offset <= '0';
         elsif rising_edge(CLK_CPU_I) then
+            time_read_req  <= time_read_req  and not bit_ctrl_done;
+            time_adj_req   <= time_adj_req   and not time_adj_done;
+            request_offset <= request_offset and not ack_offset;
             ack_ctrl_done <= '0';
             data_out <= (others => '0');
             if (RD_I = '1') then
                 case ADR_I is
                     when ADDR_CTRL_C =>
-                        data_out <= bit_ctrl_done & time_read_req & "00" & x"000000" & "00" & time_adj_req & bit_ctrl_enable;
+                        data_out <= bit_ctrl_done & time_read_req & "00" & x"000000" & "0" & request_offset & time_adj_req & bit_ctrl_enable;
                         ack_ctrl_done <= bit_ctrl_done;
                     when ADDR_STATUS_C =>
                         data_out <= reg_status;
@@ -135,6 +144,8 @@ begin
                         data_out <= reg_adj_ns;
                     when ADDR_ADJ_TIME_SEC_C =>
                         data_out <= reg_adj_sec;
+                    when ADDR_OFFSET_TIME_C =>
+                        data_out <= reg_offset_sign & reg_offset_time(30 downto 0);
                     when others =>
                         null;
                 end case;
@@ -143,6 +154,7 @@ begin
                 case  ADR_I is
                     when ADDR_CTRL_C =>
                         time_read_req <= time_read_req or DAT_I(30);
+                        request_offset <= DAT_I(2);
                         time_adj_req <= time_adj_req or DAT_I(1);
                         bit_ctrl_enable <= DAT_I(0);
                     when ADDR_STATUS_C =>
@@ -151,15 +163,12 @@ begin
                         reg_adj_ns <= DAT_I;
                     when ADDR_ADJ_TIME_SEC_C =>
                         reg_adj_sec <= DAT_I;
+                    when ADDR_OFFSET_TIME_C =>
+                        reg_offset_sign <= DAT_I(31);
+                        reg_offset_time <= '0' & DAT_I(30 downto 0);
                     when others =>
                         null;
                 end case;
-            end if;
-            if (bit_ctrl_done = '1') then
-                time_read_req <= '0';
-            end if;
-            if (time_adj_done = '1') then
-                time_adj_req <= '0';
             end if;
         end if;
     end process cpu_decod;
@@ -216,6 +225,29 @@ begin
         end if;
     end process clock_sec;
 
+    -- Calculation of offset to be applied on second and nanosecond
+    offset_p: process(CLK200_I, RST200_I)
+    begin
+        if (RST200_I = '1') then
+            val_offset_time_ns <= (others => '0');
+            offset_second <= "00";
+        elsif rising_edge(CLK200_I) then
+            -- only nanosecond offset
+            offset_second <= "00";
+            val_offset_time_ns <= unsigned(reg_offset_time);
+            -- inside 1 sec
+            if (reg_offset_time >= PPS_1S_MEGA_C) then
+                offset_second <= "01";
+                val_offset_time_ns <= unsigned(reg_offset_time) - unsigned(PPS_1S_MEGA_C);
+            end if;
+            -- inside 2 sec
+            if (reg_offset_time >= PPS_2S_MEGA_C) then
+                offset_second <= "10";
+                val_offset_time_ns <= unsigned(reg_offset_time) - unsigned(PPS_2S_MEGA_C);
+            end if;
+        end if;
+    end process offset_p;
+
     -- Clock
     clock_p: process(CLK200_I, RST200_I)
     begin
@@ -224,6 +256,7 @@ begin
             time_adj_req_r <= '0';
             time_adj_req_rr <= '0';
             ack_offset <= '0';
+            request_offset_r <= '0';
             val_reload_ns <= (others => '0');
             val_reload_sec <= (others => '0');
             reload_ns <= '0';
@@ -231,7 +264,7 @@ begin
             reload_ns <= '0';
             val_reload_ns <= (others => '0');
             val_reload_sec <= current_sec + 1;
-            ack_offset <= ack_offset and REQUEST_OFFSET_I;
+            ack_offset <= ack_offset and request_offset;
             time_adj_req_r <= time_adj_req;
             time_adj_req_rr <= time_adj_req_r;
             if (time_adj_req_r = '0') then
@@ -244,11 +277,31 @@ begin
                 time_adj_done <= '1';
                 reload_ns <= '1';
             end if;
-            -- Change time on Second
-            if (current_ns >= PPS_NS1_MEGA_C) then
-                request_offset_r <= REQUEST_OFFSET_I;
-                if (REQUEST_OFFSET_I = '1') and (request_offset_r = '0') then
-                    val_reload_ns <= signed(OFFSET_PHASE_I);
+            -- Change time on Second (apply offset)
+            if (current_ns >= signed(PPS_NS1_MEGA_C)) then
+                request_offset_r <= request_offset;
+                if (request_offset = '1') and (request_offset_r = '0') then
+                    -- nanosecond offset
+                    if (reg_offset_sign = '0') then
+                        val_reload_ns <= signed(std_logic_vector(val_offset_time_ns));
+                    else
+                        val_reload_ns <= -signed(std_logic_vector(val_offset_time_ns));
+                    end if;
+                    -- second offset
+                    if (offset_second = "01") then
+                        if (reg_offset_sign = '0') then
+                            val_reload_sec <= current_sec + 2;
+                        else
+                            val_reload_sec <= current_sec;
+                        end if;
+                    end if;
+                    if (offset_second = "10") then
+                        if (reg_offset_sign = '0') then
+                            val_reload_sec <= current_sec + 3;
+                        else
+                            val_reload_sec <= current_sec - 1;
+                        end if;
+                    end if;
                     ack_offset <= '1';
                 end if;
                 reload_ns <= '1';
@@ -256,7 +309,6 @@ begin
         end if;
     end process clock_p;
 
-    ACK_OFFSET_O <= ack_offset;
     PPS_OUT <= tick_pps;
 
     TIME_S_O <= std_logic_vector(current_sec);

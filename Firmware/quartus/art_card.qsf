@@ -112,7 +112,6 @@ set_global_assignment -name QSYS_FILE art_card_pd.qsys
 set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_clock_in.ip
 set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_pcie_a10_hip_0.ip
 set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_pcie_irq_msi_0.ip
-set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_Phasemeter_Ctrl_0.ip
 set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_PPS_Output_Ctrl_0.ip
 set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_mRO50_0.ip
 set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_phy2sys_0.ip

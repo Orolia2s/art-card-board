@@ -114,10 +114,6 @@ architecture rtl of art_card_Top is
             ts_phy2sys_time_s_o         : out std_logic_vector(31 downto 0);
             ts_phy2sys_time_ns_o        : out std_logic_vector(31 downto 0);
 
-            -- Phasemeter Feature
-            phasemeter_pps_gnss_pps_gnss: in  std_logic;
-            phasemeter_pps_ref_pps_i    : in  std_logic;
-
             -- PPS Internal
             ppsout_to_pps_out           : out std_logic;
             ppsout_tref_pps_ref         : in  std_logic;
@@ -229,10 +225,6 @@ begin
             internal_pps_out_pps_out    => internal_ref_pps,
             ts_phy2sys_time_s_o         => internal_time_s,
             ts_phy2sys_time_ns_o        => internal_time_ns,
-
-            -- Phasemeter Feature
-            phasemeter_pps_gnss_pps_gnss=> GNSS_PPS,
-            phasemeter_pps_ref_pps_i    => internal_ref_pps,
 
             -- PPS Internal
             ppsout_tref_pps_ref         => internal_ref_pps,
