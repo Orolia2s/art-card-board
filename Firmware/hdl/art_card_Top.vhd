@@ -45,13 +45,24 @@ entity art_card_Top is
         OSC_BITE        : in    std_logic;
         OSC_SDA         : inout std_logic;
         OSC_SCL         : inout std_logic;
-        DCLS_IN         : in    std_logic;
-        DCLS_OUT        : out   std_logic_vector(1 downto 0);
+        DCLS_IN         : in    std_logic_vector(3 downto 0);
+        DCLS_OUT        : out   std_logic_vector(3 downto 0);
+        SEL_IO          : out   std_logic_vector(5 downto 0);
         FREQ_IN         : in    std_logic;
         GPIO            : inout std_logic_vector(3 downto 0);
         ID              : in    std_logic_vector(3 downto 0);
+        OSC_ID          : in    std_logic_vector(3 downto 0);
         EEPROM_SCL      : inout std_logic;
-        EEPROM_SDA      : inout std_logic
+        EEPROM_SDA      : inout std_logic;
+
+        GNSS_RESETn     : out   std_logic;
+        GNSS_BOOT       : out   std_logic;
+
+        EXT_IO          : inout std_logic_vector(49 downto 0);
+        EXT_CI0         : in    std_logic;
+        EXT_CI1         : in    std_logic;
+        EXT_CO0         : out   std_logic;
+        EXT_CO1         : out   std_logic
     );
 end art_card_Top;
 
@@ -127,15 +138,44 @@ architecture rtl of art_card_Top is
             ts_pps_out_time_ns_o        : in  std_logic_vector(31 downto 0);
 
             -- PPS Output from GNSS
-            ppsout_gref_pps_ref          : in  std_logic;
-            ppsout_go_pps_out            : out std_logic;
-            ts_ppsout_g_time_s_o         : in  std_logic_vector(31 downto 0);
-            ts_ppsout_g_time_ns_o        : in  std_logic_vector(31 downto 0)
+            ppsout_gref_pps_ref         : in  std_logic;
+            ppsout_go_pps_out           : out std_logic;
+            ts_ppsout_g_time_s_o        : in  std_logic_vector(31 downto 0);
+            ts_ppsout_g_time_ns_o       : in  std_logic_vector(31 downto 0);
 
+            -- PPS Input from IO0
+            pps_out_io0_pps_out         : out std_logic;
+            pps_ref_io0_pps_ref         : in  std_logic;
+            ts_ppsout_io0_time_s_o      : in  std_logic_vector(31 downto 0);
+            ts_ppsout_io0_time_ns_o     : in  std_logic_vector(31 downto 0);
+
+            -- PPS Input from IO1
+            pps_out_io1_pps_out         : out std_logic;
+            pps_ref_io1_pps_ref         : in  std_logic;
+            ts_ppsout_io1_time_s_o      : in  std_logic_vector(31 downto 0);
+            ts_ppsout_io1_time_ns_o     : in  std_logic_vector(31 downto 0);
+
+            -- PPS Input from IO2
+            pps_out_io2_pps_out         : out std_logic;
+            pps_ref_io2_pps_ref         : in  std_logic;
+            ts_ppsout_io2_time_s_o      : in  std_logic_vector(31 downto 0);
+            ts_ppsout_io2_time_ns_o     : in  std_logic_vector(31 downto 0);
+
+            -- PPS Input from IO3
+            pps_out_io3_pps_out         : out std_logic;
+            pps_ref_io3_pps_ref         : in  std_logic;
+            ts_ppsout_io3_time_s_o      : in  std_logic_vector(31 downto 0);
+            ts_ppsout_io3_time_ns_o     : in  std_logic_vector(31 downto 0);
+
+            -- ID and Switch Configuration
+            id_pin_id_pin               : in  std_logic_vector(3 downto 0);
+            id_pin_id_osc_pin           : in  std_logic_vector(3 downto 0);
+            switch_pin_switch_pin       : out std_logic_vector(5 downto 0);
+            switch_pin_config_io_out    : out std_logic_vector(3 downto 0);
+            version_id_export           : in  std_logic_vector(31 downto 0)
 
         );
     end component art_card_pd;
-
 
     signal eeprom_sda_out: std_logic;
     signal eeprom_scl_out: std_logic;
@@ -168,6 +208,16 @@ architecture rtl of art_card_Top is
     signal pps_gnss_r_200: std_logic;
     signal pulse_gnss: std_logic;
     signal pulse_gnss_r: std_logic_vector(2 downto 0);
+
+    signal pps_in_200: std_logic_vector(3 downto 0);
+    signal pps_in_r_200: std_logic_vector(3 downto 0);
+    signal pulse_pps_in: std_logic_vector(3 downto 0);
+    signal pulse_pps_in0_r: std_logic_vector(2 downto 0);
+    signal pulse_pps_in1_r: std_logic_vector(2 downto 0);
+    signal pulse_pps_in2_r: std_logic_vector(2 downto 0);
+    signal pulse_pps_in3_r: std_logic_vector(2 downto 0);
+
+    signal config_io_out: std_logic_vector(3 downto 0);
 
 begin
 
@@ -242,7 +292,41 @@ begin
             ppsout_gref_pps_ref         => pulse_gnss_r(2),
             ppsout_go_pps_out           => open,
             ts_ppsout_g_time_s_o        => internal_time_s,
-            ts_ppsout_g_time_ns_o       => internal_time_ns
+            ts_ppsout_g_time_ns_o       => internal_time_ns,
+
+            -- PPS Input from IO0
+            pps_ref_io0_pps_ref         => pulse_pps_in0_r(2),
+            pps_out_io0_pps_out         => open,
+            ts_ppsout_io0_time_s_o      => internal_time_s,
+            ts_ppsout_io0_time_ns_o     => internal_time_ns,
+
+            -- PPS Input from IO1
+            pps_ref_io1_pps_ref         => pulse_pps_in1_r(2),
+            pps_out_io1_pps_out         => open,
+            ts_ppsout_io1_time_s_o      => internal_time_s,
+            ts_ppsout_io1_time_ns_o     => internal_time_ns,
+
+            -- PPS Input from IO2
+            pps_ref_io2_pps_ref         => pulse_pps_in2_r(2),
+            pps_out_io2_pps_out         => open,
+            ts_ppsout_io2_time_s_o      => internal_time_s,
+            ts_ppsout_io2_time_ns_o     => internal_time_ns,
+
+            -- PPS Input from IO3
+            pps_ref_io3_pps_ref         =>  pulse_pps_in3_r(2),
+            pps_out_io3_pps_out         => open,
+            ts_ppsout_io3_time_s_o      => internal_time_s,
+            ts_ppsout_io3_time_ns_o     => internal_time_ns,
+
+            -- ID and Switch Configuration
+
+
+            id_pin_id_pin               => ID,
+            id_pin_id_osc_pin           => OSC_ID,
+            switch_pin_switch_pin       => SEL_IO,
+            switch_pin_config_io_out    => config_io_out,
+            version_id_export           => x"0000000A"
+
         );
 
     -- Power over Reset
@@ -268,7 +352,7 @@ begin
 
     pcie_npor <= por_rstn;
 
-    -- Register GNSS Pulse in 200MHz
+    -- Register GNSS Pulse at 200MHz
     gnss_pulse_200: process(clk_200m, rst_200m)
     begin
         if (rst_200m = '1') then
@@ -291,6 +375,35 @@ begin
         end if;
     end process gnss_pulse_del;
 
+    -- Register Input PPS Pulse at 200MHz
+    in_pulse_200: process(clk_200m, rst_200m)
+    begin
+        if (rst_200m = '1') then
+            pps_in_200 <= (others => '0');
+            pps_in_r_200 <= (others => '0');
+        elsif rising_edge(clk_200m) then
+            pps_in_200 <= DCLS_IN;
+            pps_in_r_200 <= pps_in_200;
+            pulse_pps_in <= pps_in_200 and not pps_in_r_200;
+        end if;
+    end process in_pulse_200;
+
+    -- delay IN PPS Pulse
+    pps_pulse_del: process(clk_200m, rst_200m)
+    begin
+        if (rst_200m = '1') then
+            pulse_pps_in0_r <= (others => '0');
+            pulse_pps_in1_r <= (others => '0');
+            pulse_pps_in2_r <= (others => '0');
+            pulse_pps_in3_r <= (others => '0');
+        elsif rising_edge(clk_200m) then
+            pulse_pps_in0_r <= pulse_pps_in0_r(1 downto 0) & pulse_pps_in(0);
+            pulse_pps_in1_r <= pulse_pps_in1_r(1 downto 0) & pulse_pps_in(1);
+            pulse_pps_in2_r <= pulse_pps_in2_r(1 downto 0) & pulse_pps_in(2);
+            pulse_pps_in3_r <= pulse_pps_in3_r(1 downto 0) & pulse_pps_in(3);
+        end if;
+    end process pps_pulse_del;
+
 
     -- LED Assignment
     LED(0) <= GNSS_PPS;
@@ -299,7 +412,10 @@ begin
     LED(3) <= led_error;
 
     -- DCLS Assignment
-    DCLS_OUT <= GNSS_PPS & pps_out;
+    DCLS_OUT(0) <= pps_out when config_io_out(0) = '0' else GNSS_PPS;
+    DCLS_OUT(1) <= pps_out when config_io_out(1) = '0' else GNSS_PPS;
+    DCLS_OUT(2) <= pps_out when config_io_out(2) = '0' else GNSS_PPS;
+    DCLS_OUT(3) <= pps_out when config_io_out(3) = '0' else GNSS_PPS;
 
     -- EEPROM Assignment
     EEPROM_SCL <= eeprom_scl_out when eeprom_scl_oe = '0' else 'Z';
@@ -313,11 +429,16 @@ begin
     UART_OSC_TX <= not sUART_OSC_TX;
     sUART_OSC_RX <= not UART_OSC_RX;
     UART_GNSS_TX <= gnss_tx;
+    GNSS_RESETn <= '1';
+     GNSS_BOOT <= '0';
 
     -- Test Point
     GPIO(0) <= sUART_OSC_TX;
     GPIO(1) <= sUART_OSC_RX;
     GPIO(2) <= '0';
     GPIO(3) <= '0';
+
+
+    EXT_IO <= (others => 'Z');
 
 end rtl;
