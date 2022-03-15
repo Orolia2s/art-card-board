@@ -374,12 +374,12 @@
          type = "boolean";
       }
    }
-   element gnss_uart.s1
+   element gnss_uart.avalon_slave
    {
-      datum _lockedAddress
+      datum baseAddress
       {
-         value = "1";
-         type = "boolean";
+         value = "1445888";
+         type = "String";
       }
    }
    element i2c_opencores_0
@@ -609,7 +609,7 @@
 }
 ]]></parameter>
  <parameter name="designId" value="" />
- <parameter name="device" value="10CX105YF672I5G" />
+ <parameter name="device" value="10CX220YF672I5G" />
  <parameter name="deviceFamily" value="Cyclone 10 GX" />
  <parameter name="deviceSpeedGrade" value="5" />
  <parameter name="fabricMode" value="QSYS" />
@@ -693,7 +693,7 @@
    dir="end" />
  <interface name="clk_50m" internal="cb_clk_50m.out_clk" type="clock" dir="start" />
  <interface
-   name="gnss_serial"
+   name="gnss_uart"
    internal="gnss_uart.conduit_end"
    type="conduit"
    dir="end" />
@@ -12380,7 +12380,7 @@
    name="gnss_clock_domain"
    kind="altera_generic_component"
    version="1.0"
-   enabled="1">
+   enabled="0">
   <parameter name="componentDefinition"><![CDATA[<componentDefinition>
     <boundary>
         <interfaces>
@@ -13066,7 +13066,7 @@
                     <consumedSystemInfos>
                         <entry>
                             <key>ADDRESS_WIDTH</key>
-                            <value>5</value>
+                            <value>10</value>
                         </entry>
                     </consumedSystemInfos>
                 </value>
@@ -13882,7 +13882,7 @@
                 <isStart>false</isStart>
                 <ports>
                     <port>
-                        <name>avc_c1_clk</name>
+                        <name>wb_clk_i</name>
                         <role>clk</role>
                         <direction>Input</direction>
                         <width>1</width>
@@ -13911,12 +13911,12 @@
                 </parameters>
             </interface>
             <interface>
-                <name>clock_sink_reset</name>
+                <name>reset_sink</name>
                 <type>reset</type>
                 <isStart>false</isStart>
                 <ports>
                     <port>
-                        <name>avc_c1_reset</name>
+                        <name>wb_rst_i</name>
                         <role>reset</role>
                         <direction>Input</direction>
                         <width>1</width>
@@ -13942,181 +13942,12 @@
                 </parameters>
             </interface>
             <interface>
-                <name>interrupt_sender</name>
-                <type>interrupt</type>
-                <isStart>false</isStart>
-                <ports>
-                    <port>
-                        <name>avi_int_irq</name>
-                        <role>irq</role>
-                        <direction>Output</direction>
-                        <width>1</width>
-                        <lowerBound>0</lowerBound>
-                        <vhdlType>STD_LOGIC</vhdlType>
-                        <terminationValue>0</terminationValue>
-                    </port>
-                </ports>
-                <assignments>
-                    <assignmentValueMap/>
-                </assignments>
-                <parameters>
-                    <parameterValueMap>
-                        <entry>
-                            <key>associatedAddressablePoint</key>
-                            <value>gnss_uart.s1</value>
-                        </entry>
-                        <entry>
-                            <key>associatedClock</key>
-                            <value>clock_sink</value>
-                        </entry>
-                        <entry>
-                            <key>associatedReset</key>
-                            <value>clock_sink_reset</value>
-                        </entry>
-                        <entry>
-                            <key>bridgedReceiverOffset</key>
-                            <value>0</value>
-                        </entry>
-                        <entry>
-                            <key>bridgesToReceiver</key>
-                        </entry>
-                        <entry>
-                            <key>irqScheme</key>
-                            <value>NONE</value>
-                        </entry>
-                    </parameterValueMap>
-                </parameters>
-            </interface>
-            <interface>
-                <name>conduit_end</name>
-                <type>conduit</type>
-                <isStart>false</isStart>
-                <ports>
-                    <port>
-                        <name>stx_pad_o</name>
-                        <role>stx_pad_o</role>
-                        <direction>Output</direction>
-                        <width>1</width>
-                        <lowerBound>0</lowerBound>
-                        <vhdlType>STD_LOGIC</vhdlType>
-                        <terminationValue>0</terminationValue>
-                    </port>
-                    <port>
-                        <name>srx_pad_i</name>
-                        <role>srx_pad_i</role>
-                        <direction>Input</direction>
-                        <width>1</width>
-                        <lowerBound>0</lowerBound>
-                        <vhdlType>STD_LOGIC</vhdlType>
-                        <terminationValue>0</terminationValue>
-                    </port>
-                    <port>
-                        <name>rts_pad_o</name>
-                        <role>rts_pad_o</role>
-                        <direction>Output</direction>
-                        <width>1</width>
-                        <lowerBound>0</lowerBound>
-                        <vhdlType>STD_LOGIC</vhdlType>
-                        <terminationValue>0</terminationValue>
-                    </port>
-                    <port>
-                        <name>cts_pad_i</name>
-                        <role>cts_pad_i</role>
-                        <direction>Input</direction>
-                        <width>1</width>
-                        <lowerBound>0</lowerBound>
-                        <vhdlType>STD_LOGIC</vhdlType>
-                        <terminationValue>0</terminationValue>
-                    </port>
-                    <port>
-                        <name>dtr_pad_o</name>
-                        <role>dtr_pad_o</role>
-                        <direction>Output</direction>
-                        <width>1</width>
-                        <lowerBound>0</lowerBound>
-                        <vhdlType>STD_LOGIC</vhdlType>
-                        <terminationValue>0</terminationValue>
-                    </port>
-                    <port>
-                        <name>dsr_pad_i</name>
-                        <role>dsr_pad_i</role>
-                        <direction>Input</direction>
-                        <width>1</width>
-                        <lowerBound>0</lowerBound>
-                        <vhdlType>STD_LOGIC</vhdlType>
-                        <terminationValue>0</terminationValue>
-                    </port>
-                    <port>
-                        <name>ri_pad_i</name>
-                        <role>ri_pad_i</role>
-                        <direction>Input</direction>
-                        <width>1</width>
-                        <lowerBound>0</lowerBound>
-                        <vhdlType>STD_LOGIC</vhdlType>
-                        <terminationValue>0</terminationValue>
-                    </port>
-                    <port>
-                        <name>dcd_pad_i</name>
-                        <role>dcd_pad_i</role>
-                        <direction>Input</direction>
-                        <width>1</width>
-                        <lowerBound>0</lowerBound>
-                        <vhdlType>STD_LOGIC</vhdlType>
-                        <terminationValue>0</terminationValue>
-                    </port>
-                </ports>
-                <assignments>
-                    <assignmentValueMap/>
-                </assignments>
-                <parameters>
-                    <parameterValueMap>
-                        <entry>
-                            <key>associatedClock</key>
-                        </entry>
-                        <entry>
-                            <key>associatedReset</key>
-                        </entry>
-                        <entry>
-                            <key>prSafe</key>
-                            <value>false</value>
-                        </entry>
-                    </parameterValueMap>
-                </parameters>
-            </interface>
-            <interface>
-                <name>s1</name>
+                <name>avalon_slave</name>
                 <type>avalon</type>
                 <isStart>false</isStart>
                 <ports>
                     <port>
-                        <name>avs_s1_address</name>
-                        <role>address</role>
-                        <direction>Input</direction>
-                        <width>3</width>
-                        <lowerBound>0</lowerBound>
-                        <vhdlType>STD_LOGIC_VECTOR</vhdlType>
-                        <terminationValue>0</terminationValue>
-                    </port>
-                    <port>
-                        <name>avs_s1_writedata</name>
-                        <role>writedata</role>
-                        <direction>Input</direction>
-                        <width>32</width>
-                        <lowerBound>0</lowerBound>
-                        <vhdlType>STD_LOGIC_VECTOR</vhdlType>
-                        <terminationValue>0</terminationValue>
-                    </port>
-                    <port>
-                        <name>avs_s1_read</name>
-                        <role>read</role>
-                        <direction>Input</direction>
-                        <width>1</width>
-                        <lowerBound>0</lowerBound>
-                        <vhdlType>STD_LOGIC</vhdlType>
-                        <terminationValue>0</terminationValue>
-                    </port>
-                    <port>
-                        <name>avs_s1_chipselect</name>
+                        <name>wb_stb_i</name>
                         <role>chipselect</role>
                         <direction>Input</direction>
                         <width>1</width>
@@ -14125,16 +13956,7 @@
                         <terminationValue>0</terminationValue>
                     </port>
                     <port>
-                        <name>avs_s1_readdata</name>
-                        <role>readdata</role>
-                        <direction>Output</direction>
-                        <width>32</width>
-                        <lowerBound>0</lowerBound>
-                        <vhdlType>STD_LOGIC_VECTOR</vhdlType>
-                        <terminationValue>0</terminationValue>
-                    </port>
-                    <port>
-                        <name>avs_s1_write</name>
+                        <name>wb_we_i</name>
                         <role>write</role>
                         <direction>Input</direction>
                         <width>1</width>
@@ -14143,12 +13965,39 @@
                         <terminationValue>0</terminationValue>
                     </port>
                     <port>
-                        <name>avs_s1_waitrequest_n</name>
+                        <name>wb_adr_i</name>
+                        <role>address</role>
+                        <direction>Input</direction>
+                        <width>3</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC_VECTOR</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                    <port>
+                        <name>wb_dat_i</name>
+                        <role>writedata</role>
+                        <direction>Input</direction>
+                        <width>32</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC_VECTOR</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                    <port>
+                        <name>wb_ack_o</name>
                         <role>waitrequest_n</role>
                         <direction>Output</direction>
                         <width>1</width>
                         <lowerBound>0</lowerBound>
                         <vhdlType>STD_LOGIC</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                    <port>
+                        <name>wb_dat_o</name>
+                        <role>readdata</role>
+                        <direction>Output</direction>
+                        <width>32</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC_VECTOR</vhdlType>
                         <terminationValue>0</terminationValue>
                     </port>
                 </ports>
@@ -14176,7 +14025,7 @@
                     <parameterValueMap>
                         <entry>
                             <key>addressAlignment</key>
-                            <value>NATIVE</value>
+                            <value>DYNAMIC</value>
                         </entry>
                         <entry>
                             <key>addressGroup</key>
@@ -14184,7 +14033,7 @@
                         </entry>
                         <entry>
                             <key>addressSpan</key>
-                            <value>8</value>
+                            <value>32</value>
                         </entry>
                         <entry>
                             <key>addressUnits</key>
@@ -14200,7 +14049,7 @@
                         </entry>
                         <entry>
                             <key>associatedReset</key>
-                            <value>clock_sink_reset</value>
+                            <value>reset_sink</value>
                         </entry>
                         <entry>
                             <key>bitsPerSymbol</key>
@@ -14340,12 +14189,233 @@
                     </parameterValueMap>
                 </parameters>
             </interface>
+            <interface>
+                <name>conduit_end</name>
+                <type>conduit</type>
+                <isStart>false</isStart>
+                <ports>
+                    <port>
+                        <name>sRX</name>
+                        <role>srx</role>
+                        <direction>Input</direction>
+                        <width>1</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                    <port>
+                        <name>CTSn</name>
+                        <role>ctsn</role>
+                        <direction>Input</direction>
+                        <width>1</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                    <port>
+                        <name>DSRn</name>
+                        <role>dsrn</role>
+                        <direction>Input</direction>
+                        <width>1</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                    <port>
+                        <name>RIn</name>
+                        <role>rin</role>
+                        <direction>Input</direction>
+                        <width>1</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                    <port>
+                        <name>DCDn</name>
+                        <role>dcdn</role>
+                        <direction>Input</direction>
+                        <width>1</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                    <port>
+                        <name>sTX</name>
+                        <role>stx</role>
+                        <direction>Output</direction>
+                        <width>1</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                    <port>
+                        <name>DTRn</name>
+                        <role>dtrn</role>
+                        <direction>Output</direction>
+                        <width>1</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                    <port>
+                        <name>RTSn</name>
+                        <role>rtsn</role>
+                        <direction>Output</direction>
+                        <width>1</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                    <port>
+                        <name>OUT1n</name>
+                        <role>out1n</role>
+                        <direction>Output</direction>
+                        <width>1</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                    <port>
+                        <name>OUT2n</name>
+                        <role>out2n</role>
+                        <direction>Output</direction>
+                        <width>1</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                    <port>
+                        <name>TXRDYn</name>
+                        <role>txrdyn</role>
+                        <direction>Output</direction>
+                        <width>1</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                    <port>
+                        <name>RXRDYn</name>
+                        <role>rxrdyn</role>
+                        <direction>Output</direction>
+                        <width>1</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                    <port>
+                        <name>B_CLK</name>
+                        <role>b_clk</role>
+                        <direction>Output</direction>
+                        <width>1</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                </ports>
+                <assignments>
+                    <assignmentValueMap/>
+                </assignments>
+                <parameters>
+                    <parameterValueMap>
+                        <entry>
+                            <key>associatedClock</key>
+                            <value>clock_sink</value>
+                        </entry>
+                        <entry>
+                            <key>associatedReset</key>
+                        </entry>
+                        <entry>
+                            <key>prSafe</key>
+                            <value>false</value>
+                        </entry>
+                    </parameterValueMap>
+                </parameters>
+            </interface>
+            <interface>
+                <name>interrupt_sender</name>
+                <type>interrupt</type>
+                <isStart>false</isStart>
+                <ports>
+                    <port>
+                        <name>IRQ</name>
+                        <role>irq</role>
+                        <direction>Output</direction>
+                        <width>1</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                </ports>
+                <assignments>
+                    <assignmentValueMap/>
+                </assignments>
+                <parameters>
+                    <parameterValueMap>
+                        <entry>
+                            <key>associatedAddressablePoint</key>
+                        </entry>
+                        <entry>
+                            <key>associatedClock</key>
+                            <value>clock_sink</value>
+                        </entry>
+                        <entry>
+                            <key>associatedReset</key>
+                            <value>reset_sink</value>
+                        </entry>
+                        <entry>
+                            <key>bridgedReceiverOffset</key>
+                            <value>0</value>
+                        </entry>
+                        <entry>
+                            <key>bridgesToReceiver</key>
+                        </entry>
+                        <entry>
+                            <key>irqScheme</key>
+                            <value>NONE</value>
+                        </entry>
+                    </parameterValueMap>
+                </parameters>
+            </interface>
+            <interface>
+                <name>clock_baudrate</name>
+                <type>clock</type>
+                <isStart>false</isStart>
+                <ports>
+                    <port>
+                        <name>BR_clk</name>
+                        <role>clk</role>
+                        <direction>Input</direction>
+                        <width>1</width>
+                        <lowerBound>0</lowerBound>
+                        <vhdlType>STD_LOGIC</vhdlType>
+                        <terminationValue>0</terminationValue>
+                    </port>
+                </ports>
+                <assignments>
+                    <assignmentValueMap/>
+                </assignments>
+                <parameters>
+                    <parameterValueMap>
+                        <entry>
+                            <key>clockRate</key>
+                            <value>0</value>
+                        </entry>
+                        <entry>
+                            <key>externallyDriven</key>
+                            <value>false</value>
+                        </entry>
+                        <entry>
+                            <key>ptfSchematicName</key>
+                        </entry>
+                    </parameterValueMap>
+                </parameters>
+            </interface>
         </interfaces>
     </boundary>
     <originalModuleInfo>
-        <className>OpenCore_16550_uart</className>
-        <version>13.1</version>
-        <displayName>OpenCore 16550 uart</displayName>
+        <className>OpenCore_16550_UART</className>
+        <version>1.0</version>
+        <displayName>OpenCore 16550 UART</displayName>
     </originalModuleInfo>
     <systemInfoParameterDescriptors>
         <descriptors/>
@@ -14353,13 +14423,13 @@
     <systemInfos>
         <connPtSystemInfos>
             <entry>
-                <key>s1</key>
+                <key>avalon_slave</key>
                 <value>
-                    <connectionPointName>s1</connectionPointName>
+                    <connectionPointName>avalon_slave</connectionPointName>
                     <suppliedSystemInfos>
                         <entry>
                             <key>ADDRESS_MAP</key>
-                            <value>&lt;address-map&gt;&lt;slave name='s1' start='0x0' end='0x20' datawidth='32' /&gt;&lt;/address-map&gt;</value>
+                            <value>&lt;address-map&gt;&lt;slave name='avalon_slave' start='0x0' end='0x20' datawidth='32' /&gt;&lt;/address-map&gt;</value>
                         </entry>
                         <entry>
                             <key>ADDRESS_WIDTH</key>
@@ -14384,7 +14454,7 @@
             <isStart>false</isStart>
             <ports>
                 <port>
-                    <name>avc_c1_clk</name>
+                    <name>wb_clk_i</name>
                     <role>clk</role>
                     <direction>Input</direction>
                     <width>1</width>
@@ -14413,12 +14483,12 @@
             </parameters>
         </interface>
         <interface>
-            <name>clock_sink_reset</name>
+            <name>reset_sink</name>
             <type>reset</type>
             <isStart>false</isStart>
             <ports>
                 <port>
-                    <name>avc_c1_reset</name>
+                    <name>wb_rst_i</name>
                     <role>reset</role>
                     <direction>Input</direction>
                     <width>1</width>
@@ -14444,181 +14514,12 @@
             </parameters>
         </interface>
         <interface>
-            <name>interrupt_sender</name>
-            <type>interrupt</type>
-            <isStart>false</isStart>
-            <ports>
-                <port>
-                    <name>avi_int_irq</name>
-                    <role>irq</role>
-                    <direction>Output</direction>
-                    <width>1</width>
-                    <lowerBound>0</lowerBound>
-                    <vhdlType>STD_LOGIC</vhdlType>
-                    <terminationValue>0</terminationValue>
-                </port>
-            </ports>
-            <assignments>
-                <assignmentValueMap/>
-            </assignments>
-            <parameters>
-                <parameterValueMap>
-                    <entry>
-                        <key>associatedAddressablePoint</key>
-                        <value>gnss_uart.s1</value>
-                    </entry>
-                    <entry>
-                        <key>associatedClock</key>
-                        <value>clock_sink</value>
-                    </entry>
-                    <entry>
-                        <key>associatedReset</key>
-                        <value>clock_sink_reset</value>
-                    </entry>
-                    <entry>
-                        <key>bridgedReceiverOffset</key>
-                        <value>0</value>
-                    </entry>
-                    <entry>
-                        <key>bridgesToReceiver</key>
-                    </entry>
-                    <entry>
-                        <key>irqScheme</key>
-                        <value>NONE</value>
-                    </entry>
-                </parameterValueMap>
-            </parameters>
-        </interface>
-        <interface>
-            <name>conduit_end</name>
-            <type>conduit</type>
-            <isStart>false</isStart>
-            <ports>
-                <port>
-                    <name>stx_pad_o</name>
-                    <role>stx_pad_o</role>
-                    <direction>Output</direction>
-                    <width>1</width>
-                    <lowerBound>0</lowerBound>
-                    <vhdlType>STD_LOGIC</vhdlType>
-                    <terminationValue>0</terminationValue>
-                </port>
-                <port>
-                    <name>srx_pad_i</name>
-                    <role>srx_pad_i</role>
-                    <direction>Input</direction>
-                    <width>1</width>
-                    <lowerBound>0</lowerBound>
-                    <vhdlType>STD_LOGIC</vhdlType>
-                    <terminationValue>0</terminationValue>
-                </port>
-                <port>
-                    <name>rts_pad_o</name>
-                    <role>rts_pad_o</role>
-                    <direction>Output</direction>
-                    <width>1</width>
-                    <lowerBound>0</lowerBound>
-                    <vhdlType>STD_LOGIC</vhdlType>
-                    <terminationValue>0</terminationValue>
-                </port>
-                <port>
-                    <name>cts_pad_i</name>
-                    <role>cts_pad_i</role>
-                    <direction>Input</direction>
-                    <width>1</width>
-                    <lowerBound>0</lowerBound>
-                    <vhdlType>STD_LOGIC</vhdlType>
-                    <terminationValue>0</terminationValue>
-                </port>
-                <port>
-                    <name>dtr_pad_o</name>
-                    <role>dtr_pad_o</role>
-                    <direction>Output</direction>
-                    <width>1</width>
-                    <lowerBound>0</lowerBound>
-                    <vhdlType>STD_LOGIC</vhdlType>
-                    <terminationValue>0</terminationValue>
-                </port>
-                <port>
-                    <name>dsr_pad_i</name>
-                    <role>dsr_pad_i</role>
-                    <direction>Input</direction>
-                    <width>1</width>
-                    <lowerBound>0</lowerBound>
-                    <vhdlType>STD_LOGIC</vhdlType>
-                    <terminationValue>0</terminationValue>
-                </port>
-                <port>
-                    <name>ri_pad_i</name>
-                    <role>ri_pad_i</role>
-                    <direction>Input</direction>
-                    <width>1</width>
-                    <lowerBound>0</lowerBound>
-                    <vhdlType>STD_LOGIC</vhdlType>
-                    <terminationValue>0</terminationValue>
-                </port>
-                <port>
-                    <name>dcd_pad_i</name>
-                    <role>dcd_pad_i</role>
-                    <direction>Input</direction>
-                    <width>1</width>
-                    <lowerBound>0</lowerBound>
-                    <vhdlType>STD_LOGIC</vhdlType>
-                    <terminationValue>0</terminationValue>
-                </port>
-            </ports>
-            <assignments>
-                <assignmentValueMap/>
-            </assignments>
-            <parameters>
-                <parameterValueMap>
-                    <entry>
-                        <key>associatedClock</key>
-                    </entry>
-                    <entry>
-                        <key>associatedReset</key>
-                    </entry>
-                    <entry>
-                        <key>prSafe</key>
-                        <value>false</value>
-                    </entry>
-                </parameterValueMap>
-            </parameters>
-        </interface>
-        <interface>
-            <name>s1</name>
+            <name>avalon_slave</name>
             <type>avalon</type>
             <isStart>false</isStart>
             <ports>
                 <port>
-                    <name>avs_s1_address</name>
-                    <role>address</role>
-                    <direction>Input</direction>
-                    <width>3</width>
-                    <lowerBound>0</lowerBound>
-                    <vhdlType>STD_LOGIC_VECTOR</vhdlType>
-                    <terminationValue>0</terminationValue>
-                </port>
-                <port>
-                    <name>avs_s1_writedata</name>
-                    <role>writedata</role>
-                    <direction>Input</direction>
-                    <width>32</width>
-                    <lowerBound>0</lowerBound>
-                    <vhdlType>STD_LOGIC_VECTOR</vhdlType>
-                    <terminationValue>0</terminationValue>
-                </port>
-                <port>
-                    <name>avs_s1_read</name>
-                    <role>read</role>
-                    <direction>Input</direction>
-                    <width>1</width>
-                    <lowerBound>0</lowerBound>
-                    <vhdlType>STD_LOGIC</vhdlType>
-                    <terminationValue>0</terminationValue>
-                </port>
-                <port>
-                    <name>avs_s1_chipselect</name>
+                    <name>wb_stb_i</name>
                     <role>chipselect</role>
                     <direction>Input</direction>
                     <width>1</width>
@@ -14627,16 +14528,7 @@
                     <terminationValue>0</terminationValue>
                 </port>
                 <port>
-                    <name>avs_s1_readdata</name>
-                    <role>readdata</role>
-                    <direction>Output</direction>
-                    <width>32</width>
-                    <lowerBound>0</lowerBound>
-                    <vhdlType>STD_LOGIC_VECTOR</vhdlType>
-                    <terminationValue>0</terminationValue>
-                </port>
-                <port>
-                    <name>avs_s1_write</name>
+                    <name>wb_we_i</name>
                     <role>write</role>
                     <direction>Input</direction>
                     <width>1</width>
@@ -14645,12 +14537,39 @@
                     <terminationValue>0</terminationValue>
                 </port>
                 <port>
-                    <name>avs_s1_waitrequest_n</name>
+                    <name>wb_adr_i</name>
+                    <role>address</role>
+                    <direction>Input</direction>
+                    <width>3</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC_VECTOR</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+                <port>
+                    <name>wb_dat_i</name>
+                    <role>writedata</role>
+                    <direction>Input</direction>
+                    <width>32</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC_VECTOR</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+                <port>
+                    <name>wb_ack_o</name>
                     <role>waitrequest_n</role>
                     <direction>Output</direction>
                     <width>1</width>
                     <lowerBound>0</lowerBound>
                     <vhdlType>STD_LOGIC</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+                <port>
+                    <name>wb_dat_o</name>
+                    <role>readdata</role>
+                    <direction>Output</direction>
+                    <width>32</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC_VECTOR</vhdlType>
                     <terminationValue>0</terminationValue>
                 </port>
             </ports>
@@ -14678,7 +14597,7 @@
                 <parameterValueMap>
                     <entry>
                         <key>addressAlignment</key>
-                        <value>NATIVE</value>
+                        <value>DYNAMIC</value>
                     </entry>
                     <entry>
                         <key>addressGroup</key>
@@ -14686,7 +14605,7 @@
                     </entry>
                     <entry>
                         <key>addressSpan</key>
-                        <value>8</value>
+                        <value>32</value>
                     </entry>
                     <entry>
                         <key>addressUnits</key>
@@ -14702,7 +14621,7 @@
                     </entry>
                     <entry>
                         <key>associatedReset</key>
-                        <value>clock_sink_reset</value>
+                        <value>reset_sink</value>
                     </entry>
                     <entry>
                         <key>bitsPerSymbol</key>
@@ -14842,31 +14761,252 @@
                 </parameterValueMap>
             </parameters>
         </interface>
+        <interface>
+            <name>conduit_end</name>
+            <type>conduit</type>
+            <isStart>false</isStart>
+            <ports>
+                <port>
+                    <name>sRX</name>
+                    <role>srx</role>
+                    <direction>Input</direction>
+                    <width>1</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+                <port>
+                    <name>CTSn</name>
+                    <role>ctsn</role>
+                    <direction>Input</direction>
+                    <width>1</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+                <port>
+                    <name>DSRn</name>
+                    <role>dsrn</role>
+                    <direction>Input</direction>
+                    <width>1</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+                <port>
+                    <name>RIn</name>
+                    <role>rin</role>
+                    <direction>Input</direction>
+                    <width>1</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+                <port>
+                    <name>DCDn</name>
+                    <role>dcdn</role>
+                    <direction>Input</direction>
+                    <width>1</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+                <port>
+                    <name>sTX</name>
+                    <role>stx</role>
+                    <direction>Output</direction>
+                    <width>1</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+                <port>
+                    <name>DTRn</name>
+                    <role>dtrn</role>
+                    <direction>Output</direction>
+                    <width>1</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+                <port>
+                    <name>RTSn</name>
+                    <role>rtsn</role>
+                    <direction>Output</direction>
+                    <width>1</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+                <port>
+                    <name>OUT1n</name>
+                    <role>out1n</role>
+                    <direction>Output</direction>
+                    <width>1</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+                <port>
+                    <name>OUT2n</name>
+                    <role>out2n</role>
+                    <direction>Output</direction>
+                    <width>1</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+                <port>
+                    <name>TXRDYn</name>
+                    <role>txrdyn</role>
+                    <direction>Output</direction>
+                    <width>1</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+                <port>
+                    <name>RXRDYn</name>
+                    <role>rxrdyn</role>
+                    <direction>Output</direction>
+                    <width>1</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+                <port>
+                    <name>B_CLK</name>
+                    <role>b_clk</role>
+                    <direction>Output</direction>
+                    <width>1</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+            </ports>
+            <assignments>
+                <assignmentValueMap/>
+            </assignments>
+            <parameters>
+                <parameterValueMap>
+                    <entry>
+                        <key>associatedClock</key>
+                        <value>clock_sink</value>
+                    </entry>
+                    <entry>
+                        <key>associatedReset</key>
+                    </entry>
+                    <entry>
+                        <key>prSafe</key>
+                        <value>false</value>
+                    </entry>
+                </parameterValueMap>
+            </parameters>
+        </interface>
+        <interface>
+            <name>interrupt_sender</name>
+            <type>interrupt</type>
+            <isStart>false</isStart>
+            <ports>
+                <port>
+                    <name>IRQ</name>
+                    <role>irq</role>
+                    <direction>Output</direction>
+                    <width>1</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+            </ports>
+            <assignments>
+                <assignmentValueMap/>
+            </assignments>
+            <parameters>
+                <parameterValueMap>
+                    <entry>
+                        <key>associatedAddressablePoint</key>
+                    </entry>
+                    <entry>
+                        <key>associatedClock</key>
+                        <value>clock_sink</value>
+                    </entry>
+                    <entry>
+                        <key>associatedReset</key>
+                        <value>reset_sink</value>
+                    </entry>
+                    <entry>
+                        <key>bridgedReceiverOffset</key>
+                        <value>0</value>
+                    </entry>
+                    <entry>
+                        <key>bridgesToReceiver</key>
+                    </entry>
+                    <entry>
+                        <key>irqScheme</key>
+                        <value>NONE</value>
+                    </entry>
+                </parameterValueMap>
+            </parameters>
+        </interface>
+        <interface>
+            <name>clock_baudrate</name>
+            <type>clock</type>
+            <isStart>false</isStart>
+            <ports>
+                <port>
+                    <name>BR_clk</name>
+                    <role>clk</role>
+                    <direction>Input</direction>
+                    <width>1</width>
+                    <lowerBound>0</lowerBound>
+                    <vhdlType>STD_LOGIC</vhdlType>
+                    <terminationValue>0</terminationValue>
+                </port>
+            </ports>
+            <assignments>
+                <assignmentValueMap/>
+            </assignments>
+            <parameters>
+                <parameterValueMap>
+                    <entry>
+                        <key>clockRate</key>
+                        <value>0</value>
+                    </entry>
+                    <entry>
+                        <key>externallyDriven</key>
+                        <value>false</value>
+                    </entry>
+                    <entry>
+                        <key>ptfSchematicName</key>
+                    </entry>
+                </parameterValueMap>
+            </parameters>
+        </interface>
     </interfaces>
 </boundaryDefinition>]]></parameter>
   <parameter name="generationInfoDefinition"><![CDATA[<generationInfoDefinition>
     <hdlLibraryName>gnss_uart</hdlLibraryName>
     <fileSets>
         <fileSet>
-            <fileSetName>art_card_pd_OpenCore_16550_uart_0</fileSetName>
+            <fileSetName>gnss_uart</fileSetName>
             <fileSetFixedName>gnss_uart</fileSetFixedName>
             <fileSetKind>QUARTUS_SYNTH</fileSetKind>
             <fileSetFiles/>
         </fileSet>
         <fileSet>
-            <fileSetName>art_card_pd_OpenCore_16550_uart_0</fileSetName>
+            <fileSetName>gnss_uart</fileSetName>
             <fileSetFixedName>gnss_uart</fileSetFixedName>
             <fileSetKind>SIM_VERILOG</fileSetKind>
             <fileSetFiles/>
         </fileSet>
         <fileSet>
-            <fileSetName>art_card_pd_OpenCore_16550_uart_0</fileSetName>
+            <fileSetName>gnss_uart</fileSetName>
             <fileSetFixedName>gnss_uart</fileSetFixedName>
             <fileSetKind>SIM_VHDL</fileSetKind>
             <fileSetFiles/>
         </fileSet>
         <fileSet>
-            <fileSetName>art_card_pd_OpenCore_16550_uart_0</fileSetName>
+            <fileSetName>gnss_uart</fileSetName>
             <fileSetFixedName>gnss_uart</fileSetFixedName>
             <fileSetKind>CDC</fileSetKind>
             <fileSetFiles/>
@@ -28328,10 +28468,10 @@
  <connection
    kind="avalon"
    version="21.1"
-   start="gnss_clock_domain.m0"
-   end="gnss_uart.s1">
+   start="pcie_endpoint.rxm_bar0"
+   end="gnss_uart.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x00161000" />
   <parameter name="defaultConnection" value="false" />
   <parameter name="domainAlias" value="" />
   <parameter name="qsys_mm.burstAdapterImplementation" value="GENERIC_CONVERTER" />
@@ -28837,6 +28977,11 @@
    kind="clock"
    version="21.1"
    start="pcie_endpoint.coreclkout_hip"
+   end="gnss_uart.clock_sink" />
+ <connection
+   kind="clock"
+   version="21.1"
+   start="pcie_endpoint.coreclkout_hip"
    end="gnss_clock_domain.s0_clk" />
  <connection
    kind="clock"
@@ -28897,7 +29042,7 @@
    kind="clock"
    version="21.1"
    start="pll_50m.outclk0"
-   end="gnss_uart.clock_sink" />
+   end="gnss_uart.clock_baudrate" />
  <connection
    kind="clock"
    version="21.1"
@@ -28971,15 +29116,15 @@
    kind="interrupt"
    version="21.1"
    start="pcie_irq_msi_0.interrupt_receiver"
-   end="gnss_uart.interrupt_sender">
-  <parameter name="irqNumber" value="3" />
+   end="i2c_opencores_0.interrupt_sender">
+  <parameter name="irqNumber" value="4" />
  </connection>
  <connection
    kind="interrupt"
    version="21.1"
    start="pcie_irq_msi_0.interrupt_receiver"
-   end="i2c_opencores_0.interrupt_sender">
-  <parameter name="irqNumber" value="4" />
+   end="gnss_uart.interrupt_sender">
+  <parameter name="irqNumber" value="3" />
  </connection>
  <connection
    kind="interrupt"
@@ -29037,11 +29182,6 @@
    end="art_card_pd_in_IO0.irq_pps">
   <parameter name="irqNumber" value="8" />
  </connection>
- <connection
-   kind="reset"
-   version="21.1"
-   start="pcie_endpoint.app_nreset_status"
-   end="gnss_uart.clock_sink_reset" />
  <connection
    kind="reset"
    version="21.1"
@@ -29127,6 +29267,11 @@
    version="21.1"
    start="pcie_endpoint.app_nreset_status"
    end="mRO50_0.reset_sink" />
+ <connection
+   kind="reset"
+   version="21.1"
+   start="pcie_endpoint.app_nreset_status"
+   end="gnss_uart.reset_sink" />
  <connection
    kind="reset"
    version="21.1"

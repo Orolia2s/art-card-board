@@ -14,9 +14,15 @@
 			<sof_filename>output_files/art_card.sof<compress_bitstream>1</compress_bitstream></sof_filename> 
 		</bit0>
 	</sof_data>
+	<hex_block>
+		<hex_filename>D:/Travail_Git/art_card_pl_git/art_card/quartus/gold_number_art_card.hex</hex_filename>
+		<hex_addressing>relative</hex_addressing>
+		<hex_offset>16711680</hex_offset>
+		<hex_little_endian>0</hex_little_endian>
+	</hex_block>
 	<sof_data>
 		<start_address>00000020</start_address>
-		<end_address>00FFFFFF</end_address>
+		<end_address>00FEF000</end_address>
 		<user_name>Page_0</user_name>
 		<page_flags>1</page_flags>
 		<bit0>

@@ -484,7 +484,7 @@
         <ipxact:parameter parameterId="system_info_device_component" type="string">
           <ipxact:name>system_info_device_component</ipxact:name>
           <ipxact:displayName>Component</ipxact:displayName>
-          <ipxact:value>10CX105YF672I5G</ipxact:value>
+          <ipxact:value>10CX220YF672I5G</ipxact:value>
         </ipxact:parameter>
         <ipxact:parameter parameterId="system_info_device_speed_grade" type="string">
           <ipxact:name>system_info_device_speed_grade</ipxact:name>
@@ -1619,7 +1619,7 @@
         <ipxact:parameter parameterId="device" type="string">
           <ipxact:name>device</ipxact:name>
           <ipxact:displayName>Device</ipxact:displayName>
-          <ipxact:value>10CX105YF672I5G</ipxact:value>
+          <ipxact:value>10CX220YF672I5G</ipxact:value>
         </ipxact:parameter>
         <ipxact:parameter parameterId="deviceFamily" type="string">
           <ipxact:name>deviceFamily</ipxact:name>

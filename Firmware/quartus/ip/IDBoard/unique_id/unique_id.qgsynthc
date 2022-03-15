@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+<node xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:altera="http://www.altera.com/XMLSchema/Qsys/SystemTree">
+  <instanceKey xsi:type="xs:string">unique_id</instanceKey>
+  <instanceData xsi:type="data">
+    <parameters></parameters>
+    <interconnectAssignments></interconnectAssignments>
+    <className>unique_id</className>
+    <version>1.0</version>
+    <name>unique_id</name>
+    <uniqueName>unique_id</uniqueName>
+    <nonce>0</nonce>
+    <incidentConnections></incidentConnections>
+  </instanceData>
+  <children>
+    <node>
+      <instanceKey xsi:type="xs:string">c10gx_chip_id_0</instanceKey>
+      <instanceData xsi:type="data">
+        <parameters>
+          <parameter>
+            <name>DEVICE_FAMILY</name>
+            <value>Cyclone 10 GX</value>
+          </parameter>
+        </parameters>
+        <interconnectAssignments></interconnectAssignments>
+        <className>altera_c10gx_chip_id</className>
+        <version>19.1</version>
+        <name>c10gx_chip_id_0</name>
+        <uniqueName>altera_c10gx_chip_id</uniqueName>
+        <fixedName>altera_c10gx_chip_id</fixedName>
+        <nonce>0</nonce>
+        <incidentConnections></incidentConnections>
+        <path>unique_id.c10gx_chip_id_0</path>
+      </instanceData>
+      <children>
+        <node>
+          <instanceKey xsi:type="xs:string">altera_jtag_fuse_access_inst</instanceKey>
+          <instanceData xsi:type="data">
+            <parameters>
+              <parameter>
+                <name>DEVICE_FAMILY</name>
+                <value>Cyclone 10 GX</value>
+              </parameter>
+            </parameters>
+            <interconnectAssignments></interconnectAssignments>
+            <className>altera_c10gx_chip_id_altera_jtag_chip_id</className>
+            <version>19.1</version>
+            <name>altera_jtag_fuse_access_inst</name>
+            <uniqueName>altera_jtag_fuse_access_inst</uniqueName>
+            <fixedName>altera_jtag_fuse_access_inst</fixedName>
+            <nonce>0</nonce>
+            <incidentConnections></incidentConnections>
+            <path>unique_id.c10gx_chip_id_0.altera_jtag_fuse_access_inst</path>
+          </instanceData>
+          <children>
+            <node>
+              <instanceKey xsi:type="xs:string">altera_jtag_fuse_access_inst</instanceKey>
+              <instanceData xsi:type="data">
+                <parameters>
+                  <parameter>
+                    <name>DEVICE_FAMILY</name>
+                    <value>Cyclone 10 GX</value>
+                  </parameter>
+                </parameters>
+                <interconnectAssignments></interconnectAssignments>
+                <className>altera_jtag_chip_id</className>
+                <version>19.1</version>
+                <name>altera_jtag_fuse_access_inst</name>
+                <uniqueName>altera_jtag_chip_id</uniqueName>
+                <fixedName>altera_jtag_chip_id</fixedName>
+                <nonce>0</nonce>
+                <incidentConnections></incidentConnections>
+                <path>unique_id.c10gx_chip_id_0.altera_jtag_fuse_access_inst.altera_jtag_fuse_access_inst</path>
+              </instanceData>
+              <children></children>
+            </node>
+          </children>
+        </node>
+      </children>
+    </node>
+  </children>
+</node>

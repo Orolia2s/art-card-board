@@ -4788,7 +4788,7 @@
         <ipxact:parameter parameterId="part_trait_device" type="string">
           <ipxact:name>part_trait_device</ipxact:name>
           <ipxact:displayName>part_trait_device</ipxact:displayName>
-          <ipxact:value>10CX105YF672I5G</ipxact:value>
+          <ipxact:value>10CX220YF672I5G</ipxact:value>
         </ipxact:parameter>
         <ipxact:parameter parameterId="avmm_addr_width_hwtcl" type="int">
           <ipxact:name>avmm_addr_width_hwtcl</ipxact:name>
@@ -9147,7 +9147,7 @@
         <ipxact:parameter parameterId="device" type="string">
           <ipxact:name>device</ipxact:name>
           <ipxact:displayName>Device</ipxact:displayName>
-          <ipxact:value>10CX105YF672I5G</ipxact:value>
+          <ipxact:value>10CX220YF672I5G</ipxact:value>
         </ipxact:parameter>
         <ipxact:parameter parameterId="deviceFamily" type="string">
           <ipxact:name>deviceFamily</ipxact:name>

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deploy
+ date="2021.10.11.22:48:25"
+ outputDirectory="D:/Travail_Git/art_card_pl_git/art_card/quartus/ip/IDBoard/unique_id/">
+ <perimeter>
+  <parameter
+     name="AUTO_GENERATION_ID"
+     type="Integer"
+     defaultValue="0"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_UNIQUE_ID"
+     type="String"
+     defaultValue=""
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_DEVICE_FAMILY"
+     type="String"
+     defaultValue="Cyclone 10 GX"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_DEVICE"
+     type="String"
+     defaultValue="10CX105YF672I5G"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_DEVICE_SPEEDGRADE"
+     type="String"
+     defaultValue="5"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_CLKIN_CLOCK_RATE"
+     type="Long"
+     defaultValue="-1"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_CLKIN_CLOCK_DOMAIN"
+     type="Integer"
+     defaultValue="-1"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_CLKIN_RESET_DOMAIN"
+     type="Integer"
+     defaultValue="-1"
+     onHdl="0"
+     affectsHdl="1" />
+  <interface name="clkin" kind="clock" start="0">
+   <property name="clockRate" value="0" />
+   <property name="externallyDriven" value="false" />
+   <property name="ptfSchematicName" value="" />
+   <port name="clkin" direction="input" role="clk" width="1" />
+  </interface>
+  <interface name="reset" kind="reset" start="0">
+   <property name="associatedClock" value="clkin" />
+   <property name="synchronousEdges" value="DEASSERT" />
+   <port name="reset" direction="input" role="reset" width="1" />
+  </interface>
+  <interface name="output" kind="avalon_streaming" start="1">
+   <property name="associatedClock" value="clkin" />
+   <property name="associatedReset" value="reset" />
+   <property name="beatsPerCycle" value="1" />
+   <property name="dataBitsPerSymbol" value="8" />
+   <property name="emptyWithinPacket" value="false" />
+   <property name="errorDescriptor" value="" />
+   <property name="firstSymbolInHighOrderBits" value="true" />
+   <property name="highOrderSymbolAtMSB" value="false" />
+   <property name="maxChannel" value="0" />
+   <property name="packetDescription" value="" />
+   <property name="prSafe" value="false" />
+   <property name="readyAllowance" value="0" />
+   <property name="readyLatency" value="0" />
+   <property name="symbolsPerBeat" value="1" />
+   <port name="data_valid" direction="output" role="valid" width="1" />
+   <port name="chip_id" direction="output" role="data" width="64" />
+  </interface>
+ </perimeter>
+ <entity kind="unique_id" version="1.0" name="unique_id">
+  <parameter name="AUTO_CLKIN_CLOCK_DOMAIN" value="-1" />
+  <parameter name="AUTO_CLKIN_RESET_DOMAIN" value="-1" />
+  <parameter name="AUTO_GENERATION_ID" value="0" />
+  <parameter name="AUTO_DEVICE" value="10CX105YF672I5G" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone 10 GX" />
+  <parameter name="AUTO_CLKIN_CLOCK_RATE" value="-1" />
+  <parameter name="AUTO_UNIQUE_ID" value="" />
+  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="5" />
+  <generatedFiles>
+   <file
+       path="D:\Travail_Git\art_card_pl_git\art_card\quartus\ip\IDBoard\unique_id\synth\unique_id.vhd"
+       attributes="CONTAINS_INLINE_CONFIGURATION" />
+  </generatedFiles>
+  <childGeneratedFiles>
+   <file
+       path="D:\Travail_Git\art_card_pl_git\art_card\quartus\ip\IDBoard\unique_id\synth\unique_id.vhd"
+       attributes="CONTAINS_INLINE_CONFIGURATION" />
+  </childGeneratedFiles>
+  <sourceFiles>
+   <file
+       path="D:/Travail_Git/art_card_pl_git/art_card/quartus/ip/IDBoard/unique_id.ip" />
+  </sourceFiles>
+  <childSourceFiles>
+   <file
+       path="C:/intelfpga/21.1_pro/ip/altera/pgm/altera_c10gx_chip_id/altera_c10gx_chip_id_hw.tcl" />
+   <file
+       path="C:/intelfpga/21.1_pro/ip/altera/pgm/altera_jtag_chip_id/altera_jtag_chip_id_hw.tcl" />
+  </childSourceFiles>
+  <messages>
+   <message level="Info" culprit="unique_id">"Generating: unique_id"</message>
+   <message level="Info" culprit="unique_id">"Generating: altera_c10gx_chip_id"</message>
+   <message level="Info" culprit="c10gx_chip_id_0">generating top-level entity altera_c10gx_chip_id</message>
+   <message level="Info" culprit="altera_jtag_fuse_access_inst">"Generating: altera_jtag_fuse_access_inst"</message>
+   <message level="Info" culprit="unique_id">"Generating: altera_jtag_fuse_access_inst"</message>
+   <message level="Info" culprit="unique_id">"Generating: altera_jtag_chip_id"</message>
+   <message level="Info" culprit="altera_jtag_fuse_access_inst">generating top-level entity altera_jtag_chip_id</message>
+  </messages>
+ </entity>
+ <entity
+   kind="altera_c10gx_chip_id"
+   version="19.1"
+   name="altera_c10gx_chip_id">
+  <parameter name="DEVICE_FAMILY" value="Cyclone 10 GX" />
+  <generatedFiles>
+   <file
+       path="D:\Travail_Git\art_card_pl_git\art_card\quartus\ip\IDBoard\unique_id\altera_c10gx_chip_id_191\synth\altera_c10gx_chip_id.v"
+       attributes="" />
+  </generatedFiles>
+  <childGeneratedFiles>
+   <file
+       path="D:\Travail_Git\art_card_pl_git\art_card\quartus\ip\IDBoard\unique_id\altera_c10gx_chip_id_191\synth\altera_c10gx_chip_id.v"
+       attributes="" />
+  </childGeneratedFiles>
+  <sourceFiles>
+   <file
+       path="C:/intelfpga/21.1_pro/ip/altera/pgm/altera_c10gx_chip_id/altera_c10gx_chip_id_hw.tcl" />
+  </sourceFiles>
+  <childSourceFiles>
+   <file
+       path="C:/intelfpga/21.1_pro/ip/altera/pgm/altera_jtag_chip_id/altera_jtag_chip_id_hw.tcl" />
+  </childSourceFiles>
+  <instantiator instantiator="unique_id" as="c10gx_chip_id_0" />
+  <messages>
+   <message level="Info" culprit="unique_id">"Generating: altera_c10gx_chip_id"</message>
+   <message level="Info" culprit="c10gx_chip_id_0">generating top-level entity altera_c10gx_chip_id</message>
+   <message level="Info" culprit="altera_jtag_fuse_access_inst">"Generating: altera_jtag_fuse_access_inst"</message>
+   <message level="Info" culprit="unique_id">"Generating: altera_jtag_fuse_access_inst"</message>
+   <message level="Info" culprit="unique_id">"Generating: altera_jtag_chip_id"</message>
+   <message level="Info" culprit="altera_jtag_fuse_access_inst">generating top-level entity altera_jtag_chip_id</message>
+  </messages>
+ </entity>
+ <entity
+   kind="altera_c10gx_chip_id_altera_jtag_chip_id"
+   version="19.1"
+   name="altera_jtag_fuse_access_inst">
+  <parameter name="DEVICE_FAMILY" value="Cyclone 10 GX" />
+  <generatedFiles>
+   <file
+       path="D:\Travail_Git\art_card_pl_git\art_card\quartus\ip\IDBoard\unique_id\altera_c10gx_chip_id_191\synth\altera_jtag_fuse_access_inst.vhd"
+       attributes="CONTAINS_INLINE_CONFIGURATION" />
+  </generatedFiles>
+  <childGeneratedFiles>
+   <file
+       path="D:\Travail_Git\art_card_pl_git\art_card\quartus\ip\IDBoard\unique_id\altera_c10gx_chip_id_191\synth\altera_jtag_fuse_access_inst.vhd"
+       attributes="CONTAINS_INLINE_CONFIGURATION" />
+  </childGeneratedFiles>
+  <sourceFiles/>
+  <childSourceFiles>
+   <file
+       path="C:/intelfpga/21.1_pro/ip/altera/pgm/altera_jtag_chip_id/altera_jtag_chip_id_hw.tcl" />
+  </childSourceFiles>
+  <instantiator instantiator="altera_c10gx_chip_id" as="altera_jtag_fuse_access_inst" />
+  <messages>
+   <message level="Info" culprit="unique_id">"Generating: altera_jtag_fuse_access_inst"</message>
+   <message level="Info" culprit="unique_id">"Generating: altera_jtag_chip_id"</message>
+   <message level="Info" culprit="altera_jtag_fuse_access_inst">generating top-level entity altera_jtag_chip_id</message>
+  </messages>
+ </entity>
+ <entity kind="altera_jtag_chip_id" version="19.1" name="altera_jtag_chip_id">
+  <parameter name="DEVICE_FAMILY" value="Cyclone 10 GX" />
+  <generatedFiles>
+   <file
+       path="D:\Travail_Git\art_card_pl_git\art_card\quartus\ip\IDBoard\unique_id\altera_jtag_chip_id_191\synth\altera_jtag_chip_id.v"
+       attributes="" />
+   <file
+       path="D:\Travail_Git\art_card_pl_git\art_card\quartus\ip\IDBoard\unique_id\altera_jtag_chip_id_191\synth\altera_jtag_block_access.sv"
+       attributes="" />
+  </generatedFiles>
+  <childGeneratedFiles>
+   <file
+       path="D:\Travail_Git\art_card_pl_git\art_card\quartus\ip\IDBoard\unique_id\altera_jtag_chip_id_191\synth\altera_jtag_chip_id.v"
+       attributes="" />
+   <file
+       path="D:\Travail_Git\art_card_pl_git\art_card\quartus\ip\IDBoard\unique_id\altera_jtag_chip_id_191\synth\altera_jtag_block_access.sv"
+       attributes="" />
+  </childGeneratedFiles>
+  <sourceFiles>
+   <file
+       path="C:/intelfpga/21.1_pro/ip/altera/pgm/altera_jtag_chip_id/altera_jtag_chip_id_hw.tcl" />
+  </sourceFiles>
+  <childSourceFiles/>
+  <instantiator
+     instantiator="altera_jtag_fuse_access_inst"
+     as="altera_jtag_fuse_access_inst" />
+  <messages>
+   <message level="Info" culprit="unique_id">"Generating: altera_jtag_chip_id"</message>
+   <message level="Info" culprit="altera_jtag_fuse_access_inst">generating top-level entity altera_jtag_chip_id</message>
+  </messages>
+ </entity>
+</deploy>

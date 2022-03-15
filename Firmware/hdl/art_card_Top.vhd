@@ -111,14 +111,19 @@ architecture rtl of art_card_Top is
             i2c_eeprom_sda_padoen_o     : out std_logic;
 
             -- GNSS Serial
-            gnss_serial_stx_pad_o       : out std_logic;
-            gnss_serial_srx_pad_i       : in  std_logic;
-            gnss_serial_rts_pad_o       : out std_logic;
-            gnss_serial_cts_pad_i       : in  std_logic;
-            gnss_serial_dtr_pad_o       : out std_logic;
-            gnss_serial_dsr_pad_i       : in  std_logic;
-            gnss_serial_ri_pad_i        : in  std_logic;
-            gnss_serial_dcd_pad_i       : in  std_logic;
+            gnss_uart_srx               : in  std_logic;
+            gnss_uart_ctsn              : in  std_logic;
+            gnss_uart_dsrn              : in  std_logic;
+            gnss_uart_rin               : in  std_logic;
+            gnss_uart_dcdn              : in  std_logic;
+            gnss_uart_stx               : out std_logic;
+            gnss_uart_dtrn              : out std_logic;
+            gnss_uart_rtsn              : out std_logic;
+            gnss_uart_out1n             : out std_logic;
+            gnss_uart_out2n             : out std_logic;
+            gnss_uart_txrdyn            : out std_logic;
+            gnss_uart_rxrdyn            : out std_logic;
+            gnss_uart_b_clk             : out std_logic;
 
             -- Phy2sys
             internal_pps_out_pps_out    : out std_logic;
@@ -198,6 +203,9 @@ architecture rtl of art_card_Top is
     signal por_rst_cnt : unsigned(8 downto 0);
     signal pcie_npor: std_logic;
 
+    signal por_gnssn: std_logic;
+    signal por_gnss_cnt : unsigned(24 downto 0);
+
     signal internal_ref_pps: std_logic;
     signal internal_time_s : std_logic_vector(31 downto 0);
     signal internal_time_ns : std_logic_vector(31 downto 0);
@@ -262,14 +270,19 @@ begin
             i2c_eeprom_sda_padoen_o     => eeprom_sda_oe,
 
             -- GNSS Serial
-            gnss_serial_stx_pad_o       => gnss_tx,
-            gnss_serial_srx_pad_i       => UART_GNSS_RX,
-            gnss_serial_rts_pad_o       => open,
-            gnss_serial_cts_pad_i       => '1',
-            gnss_serial_dtr_pad_o       => open,
-            gnss_serial_dsr_pad_i       => '1',
-            gnss_serial_ri_pad_i        => '0',
-            gnss_serial_dcd_pad_i       => '1',
+            gnss_uart_srx               => UART_GNSS_RX,
+            gnss_uart_ctsn              => '0',
+            gnss_uart_dsrn              => '0',
+            gnss_uart_rin               => '1',
+            gnss_uart_dcdn              => '0',
+            gnss_uart_stx               => gnss_tx,
+            gnss_uart_dtrn              => open,
+            gnss_uart_rtsn              => open,
+            gnss_uart_out1n             => open,
+            gnss_uart_out2n             => open,
+            gnss_uart_txrdyn            => open,
+            gnss_uart_rxrdyn            => open,
+            gnss_uart_b_clk             => open,
 
             -- Phy2sys
             internal_pps_out_pps_out    => internal_ref_pps,
@@ -429,8 +442,21 @@ begin
     UART_OSC_TX <= not sUART_OSC_TX;
     sUART_OSC_RX <= not UART_OSC_RX;
     UART_GNSS_TX <= gnss_tx;
-    GNSS_RESETn <= '1';
-     GNSS_BOOT <= '0';
+    GNSS_BOOT <= '1';
+
+    -- Reset GNSS
+    process(CLK_25M)
+    begin
+        if rising_edge(CLK_25M) then
+            por_gnssn <= por_gnss_cnt(24);
+            if (por_gnss_cnt(24) = '0') then
+                por_gnss_cnt <= por_gnss_cnt + 1;
+            end if;
+        end if;
+    end process;
+
+    GNSS_RESETn <= por_gnssn;
+
 
     -- Test Point
     GPIO(0) <= sUART_OSC_TX;

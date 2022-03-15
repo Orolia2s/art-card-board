@@ -51,10 +51,10 @@ architecture rtl_IOCOnfig of IOCOnfig is
     constant CST_ADDR_IO2:      std_logic_vector(3 downto 0)    := x"8";
     constant CST_ADDR_IO3:      std_logic_vector(3 downto 0)    := x"C";
 
-    constant CST_CAP_IO0:       std_logic_vector(15 downto 0)   := x"001F";		--1PPS In/Out/Out GNSS | 10Mhz Out
+    constant CST_CAP_IO0:       std_logic_vector(15 downto 0)   := x"0017";		--1PPS In/Out/Out GNSS | 10Mhz Out
     constant CST_CAP_IO1:       std_logic_vector(15 downto 0)   := x"000F";		--1PPS In/Out/Out GNSS | 10Mhz In
-    constant CST_CAP_IO2:       std_logic_vector(15 downto 0)   := x"0003";		--1PPS In/Out/Out GNSS
-    constant CST_CAP_IO3:       std_logic_vector(15 downto 0)   := x"0003";		--1PPS In/Out/Out GNSS
+    constant CST_CAP_IO2:       std_logic_vector(15 downto 0)   := x"0007";		--1PPS In/Out/Out GNSS
+    constant CST_CAP_IO3:       std_logic_vector(15 downto 0)   := x"0007";		--1PPS In/Out/Out GNSS
 
     constant CST_IO_IN_1PPS:    std_logic_vector(15 downto 0)   := x"0001";
     constant CST_IO_OUT_1PPS:   std_logic_vector(15 downto 0)   := x"0002";
@@ -189,6 +189,6 @@ begin
     end process;
 
     SWITCH_PIN <= config_sw;
-    CONFIG_IO_OUT <= config_sw(3 downto 0);
+    CONFIG_IO_OUT <= config_io;
 
 end rtl_IOCOnfig;
