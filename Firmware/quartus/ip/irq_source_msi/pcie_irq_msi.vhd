@@ -66,9 +66,9 @@ architecture A_pcie_irq_msi of pcie_irq_msi is
     signal s_req:           std_logic_vector(15 downto 0);
     signal s_req_data:      std_logic_vector(3 downto 0);
 
-    constant TIME_IRQ_C:    unsigned(15 downto 0) := x"1D4C";  -- 8ns * 7500 = 60us
-    constant TIME_IRQ_MAX_C:unsigned(15 downto 0) := x"6000";
-    constant TIME_IRQ_RET_C:unsigned(15 downto 0) := x"6010";
+    constant TIME_IRQ_C:    unsigned(15 downto 0) := x"000F";  -- 8ns *   625 =   5 000 ns
+    constant TIME_IRQ_MAX_C:unsigned(15 downto 0) := x"3000";  -- 8ns * 12288 =  98 304 ns
+    constant TIME_IRQ_RET_C:unsigned(15 downto 0) := x"3010";
     signal cpt_time_irq:    unsigned(15 downto 0);
     signal top_time_irq:    std_logic;
 
@@ -118,8 +118,8 @@ begin
                 elsif (s_act_irq(2) = '0') and (s_irq_rr(2) = '1') then
                     s_req <= x"0004";
                     s_req_data <= x"2";
---                elsif (s_act_irq(3) = '0') and (s_irq_rr(3) = '1') then
-                elsif (s_act_irq(3) = '0') and (top_time_irq = '1') and (time_err = '0') then
+                elsif (s_act_irq(3) = '0') and (s_irq_rr(3) = '1') then
+--                elsif (s_act_irq(3) = '0') and (top_time_irq = '1') and (time_err = '0') then
                     s_req <= x"0008";
                     s_req_data <= x"3";
                 elsif (s_act_irq(4) = '0') and (s_irq_rr(4) = '1') then
@@ -186,14 +186,14 @@ begin
                 if (cpt_time_irq = TIME_IRQ_C) then
                     top_time_irq <= '1';
                 end if;
-                if (cpt_time_irq = TIME_IRQ_MAX_C) then
-                    time_err <= '1';
-                end if;
-                if (cpt_time_irq = TIME_IRQ_RET_C) then
-                    time_err <= '0';
-                    top_time_irq <= '0';
-                    cpt_time_irq <= (others => '0');
-                end if;
+--                if (cpt_time_irq = TIME_IRQ_MAX_C) then
+--                    time_err <= '1';
+--                end if;
+--                if (cpt_time_irq = TIME_IRQ_RET_C) then
+--                    time_err <= '0';
+--                    top_time_irq <= '0';
+--                    cpt_time_irq <= (others => '0');
+--                end if;
             end if;
         end if;
     end process;
@@ -209,7 +209,8 @@ begin
             s_act_irq <= (others => '0');
         elsif rising_edge(CLK_I) then
             --unset irqs
-            s_act_irq <= s_act_irq and (s_irq_rr(15 downto 4) & top_time_irq & s_irq_rr(2 downto 0));
+--            s_act_irq <= s_act_irq and (s_irq_rr(15 downto 4) & top_time_irq & s_irq_rr(2 downto 0));
+            s_act_irq <= s_act_irq and (s_irq_rr(15 downto 0));
             txs_write <= txs_write and TXS_WAITREQUEST_I;
             if (s_master_enable = '1') and (s_msi_enable = '1') then
                 txs_address <= s_msi_address(31 downto 0);

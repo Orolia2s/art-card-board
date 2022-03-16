@@ -131,3 +131,7 @@ set_global_assignment -name PRESERVE_FOR_DEBUG_ENABLE ON
 set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_i2c_opencores_0.ip
 set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_PPS_Output_Ctrl_1.ip
 set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_PPS_Output_Ctrl_2.ip
+set_global_assignment -name HEX_FILE gold_number_art_card.hex
+set_global_assignment -name IP_FILE ip/art_card_pd/IDBoard_0.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/c10gx_chip_id_0.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/version_id.ip

@@ -1,0 +1,74 @@
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_TOOL_NAME "QsysPrimePro"
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_TOOL_VERSION "21.1"
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_TOOL_ENV "QsysPrimePro"
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_TOOL_VENDOR_NAME "Intel Corporation"
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_TOP_LEVEL_COMPONENT_NAME "altera_c10gx_chip_id"
+set_global_assignment -library "unique_id" -name SOPCINFO_FILE [file join $::quartus(qip_path) "unique_id.sopcinfo"]
+set_global_assignment -entity "unique_id" -library "unique_id" -name SLD_INFO "QSYS_NAME unique_id HAS_SOPCINFO 1 GENERATION_ID 0"
+set_global_assignment -library "unique_id" -name MISC_FILE [file join $::quartus(qip_path) "unique_id.cmp"]
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_TARGETED_DEVICE_FAMILY "Cyclone 10 GX"
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_GENERATED_DEVICE_FAMILY "{Cyclone 10 GX}"
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_QSYS_MODE "STANDALONE"
+set_global_assignment -name SYNTHESIS_ONLY_QIP ON
+set_global_assignment -library "unique_id" -name MISC_FILE [file join $::quartus(qip_path) "../unique_id.ip"]
+
+set_global_assignment -entity "altera_jtag_chip_id" -library "altera_jtag_chip_id_191" -name IP_COMPONENT_NAME "YWx0ZXJhX2p0YWdfY2hpcF9pZA=="
+set_global_assignment -entity "altera_jtag_chip_id" -library "altera_jtag_chip_id_191" -name IP_COMPONENT_DISPLAY_NAME "SW50ZWwgRlBHQSBKVEFHIENoaXAgSUQ="
+set_global_assignment -entity "altera_jtag_chip_id" -library "altera_jtag_chip_id_191" -name IP_COMPONENT_REPORT_HIERARCHY "Off"
+set_global_assignment -entity "altera_jtag_chip_id" -library "altera_jtag_chip_id_191" -name IP_COMPONENT_INTERNAL "On"
+set_global_assignment -entity "altera_jtag_chip_id" -library "altera_jtag_chip_id_191" -name IP_COMPONENT_AUTHOR "SW50ZWwgQ29ycG9yYXRpb24="
+set_global_assignment -entity "altera_jtag_chip_id" -library "altera_jtag_chip_id_191" -name IP_COMPONENT_VERSION "MTkuMQ=="
+set_global_assignment -entity "altera_jtag_chip_id" -library "altera_jtag_chip_id_191" -name IP_COMPONENT_DESCRIPTION "VGhlIEludGVsIEZQR0EgVW5pcXVlIENoaXAgSUQgbWVnYWZ1bmN0aW9uIHByb3ZpZGVzIGZlYXR1cmUgdG8gYWNxdWlyZSB0aGUgdW5pcXVlIGNoaXAgSUQgb2YgRlBHQSB0aHJvdWdoIEpUQUcgYmxvY2su"
+set_global_assignment -entity "altera_jtag_chip_id" -library "altera_jtag_chip_id_191" -name IP_COMPONENT_PARAMETER "REVWSUNFX0ZBTUlMWQ==::Q3ljbG9uZSAxMCBHWA==::REVWSUNFX0ZBTUlMWQ=="
+set_global_assignment -entity "altera_jtag_chip_id" -library "altera_jtag_chip_id_191" -name IP_COMPONENT_GROUP "QmFzaWMgRnVuY3Rpb25zL0NvbmZpZ3VyYXRpb24gYW5kIFByb2dyYW1taW5n"
+set_global_assignment -entity "altera_jtag_chip_id" -library "altera_jtag_chip_id_191" -name IP_COMPONENT_DOCUMENTATION_LINK "aHR0cDovL3d3dy5hbHRlcmEuY29tL2xpdGVyYXR1cmUvdWcvYWx0Y2hpcGlkLnBkZg=="
+set_global_assignment -entity "altera_jtag_chip_id" -library "altera_jtag_chip_id_191" -name IP_COMPONENT_DOCUMENTATION_LINK "aHR0cHM6Ly9kb2N1bWVudGF0aW9uLmFsdGVyYS5jb20vIy9saW5rL3NhbTE0MTIwNTI5Nzc3NzUvc2FtMTQxMjA1Mjg3MDg4Ng=="
+set_global_assignment -entity "altera_jtag_chip_id" -library "altera_jtag_chip_id_191" -name IP_COMPONENT_DOCUMENTATION_LINK "aHR0cHM6Ly9kb2N1bWVudGF0aW9uLmFsdGVyYS5jb20vIy9saW5rL2hjbzE0MjE2OTgwNDIwODcvaGNvMTQyMTY5ODAxMzQwOA=="
+set_global_assignment -entity "altera_jtag_fuse_access_inst" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_NAME "YWx0ZXJhX2p0YWdfZnVzZV9hY2Nlc3NfaW5zdA=="
+set_global_assignment -entity "altera_jtag_fuse_access_inst" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_DISPLAY_NAME "YWx0ZXJhX2p0YWdfZnVzZV9hY2Nlc3NfaW5zdA=="
+set_global_assignment -entity "altera_jtag_fuse_access_inst" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_REPORT_HIERARCHY "Off"
+set_global_assignment -entity "altera_jtag_fuse_access_inst" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_INTERNAL "Off"
+set_global_assignment -entity "altera_jtag_fuse_access_inst" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_AUTHOR "QWx0ZXJhIENvcnBvcmF0aW9u"
+set_global_assignment -entity "altera_jtag_fuse_access_inst" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_VERSION "MTkuMQ=="
+set_global_assignment -entity "altera_jtag_fuse_access_inst" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_PARAMETER "REVWSUNFX0ZBTUlMWQ==::Q3ljbG9uZSAxMCBHWA==::REVWSUNFX0ZBTUlMWQ=="
+set_global_assignment -entity "altera_c10gx_chip_id" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_NAME "YWx0ZXJhX2MxMGd4X2NoaXBfaWQ="
+set_global_assignment -entity "altera_c10gx_chip_id" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_DISPLAY_NAME "VW5pcXVlIENoaXAgSUQgSW50ZWwgQ3ljbG9uZSAxMCBHWCBGUEdBIElQ"
+set_global_assignment -entity "altera_c10gx_chip_id" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_REPORT_HIERARCHY "Off"
+set_global_assignment -entity "altera_c10gx_chip_id" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_INTERNAL "Off"
+set_global_assignment -entity "altera_c10gx_chip_id" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_AUTHOR "SW50ZWwgQ29ycG9yYXRpb24="
+set_global_assignment -entity "altera_c10gx_chip_id" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_VERSION "MTkuMQ=="
+set_global_assignment -entity "altera_c10gx_chip_id" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_DESCRIPTION "VGhlIEludGVsIEZQR0EgVW5pcXVlIENoaXAgSUQgbWVnYWZ1bmN0aW9uIHByb3ZpZGVzIGZlYXR1cmUgdG8gYWNxdWlyZSB0aGUgdW5pcXVlIGNoaXAgSUQgb2YgRlBHQS4="
+set_global_assignment -entity "altera_c10gx_chip_id" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_PARAMETER "REVWSUNFX0ZBTUlMWQ==::Q3ljbG9uZSAxMCBHWA==::REVWSUNFX0ZBTUlMWQ=="
+set_global_assignment -entity "altera_c10gx_chip_id" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_GROUP "QmFzaWMgRnVuY3Rpb25zL0NvbmZpZ3VyYXRpb24gYW5kIFByb2dyYW1taW5n"
+set_global_assignment -entity "altera_c10gx_chip_id" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_DOCUMENTATION_LINK "aHR0cDovL3d3dy5hbHRlcmEuY29tL2xpdGVyYXR1cmUvdWcvYWx0Y2hpcGlkLnBkZg=="
+set_global_assignment -entity "altera_c10gx_chip_id" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_DOCUMENTATION_LINK "aHR0cHM6Ly9kb2N1bWVudGF0aW9uLmFsdGVyYS5jb20vIy9saW5rL3NhbTE0MTIwNTI5Nzc3NzUvc2FtMTQxMjA1Mjg3MDg4Ng=="
+set_global_assignment -entity "altera_c10gx_chip_id" -library "altera_c10gx_chip_id_191" -name IP_COMPONENT_DOCUMENTATION_LINK "aHR0cHM6Ly9kb2N1bWVudGF0aW9uLmFsdGVyYS5jb20vIy9saW5rL2hjbzE0MjE2OTgwNDIwODcvaGNvMTQyMTY5ODAxMzQwOA=="
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_COMPONENT_NAME "dW5pcXVlX2lk"
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_COMPONENT_DISPLAY_NAME "c3lzdGVt"
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_COMPONENT_REPORT_HIERARCHY "On"
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_COMPONENT_INTERNAL "Off"
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_COMPONENT_AUTHOR "SW50ZWwgQ29ycG9yYXRpb24="
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_COMPONENT_VERSION "MS4w"
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_COMPONENT_PARAMETER "QVVUT19HRU5FUkFUSU9OX0lE::MA==::QXV0byBHRU5FUkFUSU9OX0lE"
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfRkFNSUxZ::Q3ljbG9uZSAxMCBHWA==::QXV0byBERVZJQ0VfRkFNSUxZ"
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0U=::MTBDWDEwNVlGNjcySTVH::QXV0byBERVZJQ0U="
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfU1BFRURHUkFERQ==::NQ==::QXV0byBERVZJQ0VfU1BFRURHUkFERQ=="
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_COMPONENT_PARAMETER "QVVUT19DTEtJTl9DTE9DS19SQVRF::LTE=::QXV0byBDTE9DS19SQVRF"
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_COMPONENT_PARAMETER "QVVUT19DTEtJTl9DTE9DS19ET01BSU4=::LTE=::QXV0byBDTE9DS19ET01BSU4="
+set_global_assignment -entity "unique_id" -library "unique_id" -name IP_COMPONENT_PARAMETER "QVVUT19DTEtJTl9SRVNFVF9ET01BSU4=::LTE=::QXV0byBSRVNFVF9ET01BSU4="
+
+
+set_global_assignment -library "altera_jtag_chip_id_191" -name VERILOG_FILE [file join $::quartus(qip_path) "altera_jtag_chip_id_191/synth/altera_jtag_chip_id.v"]
+set_global_assignment -library "altera_jtag_chip_id_191" -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "altera_jtag_chip_id_191/synth/altera_jtag_block_access.sv"]
+set_global_assignment -library "altera_c10gx_chip_id_191" -name VHDL_FILE [file join $::quartus(qip_path) "altera_c10gx_chip_id_191/synth/altera_jtag_fuse_access_inst.vhd"]
+set_global_assignment -library "altera_c10gx_chip_id_191" -name VERILOG_FILE [file join $::quartus(qip_path) "altera_c10gx_chip_id_191/synth/altera_c10gx_chip_id.v"]
+set_global_assignment -library "unique_id" -name VHDL_FILE [file join $::quartus(qip_path) "synth/unique_id.vhd"]
+
+
+set_global_assignment -entity "altera_c10gx_chip_id" -library "altera_c10gx_chip_id_191" -name IP_TOOL_NAME "altera_c10gx_chip_id"
+set_global_assignment -entity "altera_c10gx_chip_id" -library "altera_c10gx_chip_id_191" -name IP_TOOL_VERSION "19.1"
+set_global_assignment -entity "altera_c10gx_chip_id" -library "altera_c10gx_chip_id_191" -name IP_TOOL_ENV "QsysPrimePro"
+set_global_assignment -entity "altera_jtag_chip_id" -library "altera_jtag_chip_id_191" -name IP_TOOL_NAME "altera_jtag_chip_id"
+set_global_assignment -entity "altera_jtag_chip_id" -library "altera_jtag_chip_id_191" -name IP_TOOL_VERSION "19.1"
+set_global_assignment -entity "altera_jtag_chip_id" -library "altera_jtag_chip_id_191" -name IP_TOOL_ENV "QsysPrimePro"
+

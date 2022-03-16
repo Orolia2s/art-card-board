@@ -50,6 +50,7 @@ entity art_card_Top is
         FREQ_IN         : in    std_logic;
         GPIO            : inout std_logic_vector(3 downto 0);
         ID              : in    std_logic_vector(3 downto 0);
+        OSC_ID          : in    std_logic_vector(3 downto 0);
         EEPROM_SCL      : inout std_logic;
         EEPROM_SDA      : inout std_logic
     );
@@ -100,14 +101,19 @@ architecture rtl of art_card_Top is
             i2c_eeprom_sda_padoen_o     : out std_logic;
 
             -- GNSS Serial
-            gnss_serial_stx_pad_o       : out std_logic;
-            gnss_serial_srx_pad_i       : in  std_logic;
-            gnss_serial_rts_pad_o       : out std_logic;
-            gnss_serial_cts_pad_i       : in  std_logic;
-            gnss_serial_dtr_pad_o       : out std_logic;
-            gnss_serial_dsr_pad_i       : in  std_logic;
-            gnss_serial_ri_pad_i        : in  std_logic;
-            gnss_serial_dcd_pad_i       : in  std_logic;
+            gnss_uart_srx               : in  std_logic;
+            gnss_uart_ctsn              : in  std_logic;
+            gnss_uart_dsrn              : in  std_logic;
+            gnss_uart_rin               : in  std_logic;
+            gnss_uart_dcdn              : in  std_logic;
+            gnss_uart_stx               : out std_logic;
+            gnss_uart_dtrn              : out std_logic;
+            gnss_uart_rtsn              : out std_logic;
+            gnss_uart_out1n             : out std_logic;
+            gnss_uart_out2n             : out std_logic;
+            gnss_uart_txrdyn            : out std_logic;
+            gnss_uart_rxrdyn            : out std_logic;
+            gnss_uart_b_clk             : out std_logic;
 
             -- Phy2sys
             internal_pps_out_pps_out    : out std_logic;
@@ -130,8 +136,10 @@ architecture rtl of art_card_Top is
             ppsout_gref_pps_ref          : in  std_logic;
             ppsout_go_pps_out            : out std_logic;
             ts_ppsout_g_time_s_o         : in  std_logic_vector(31 downto 0);
-            ts_ppsout_g_time_ns_o        : in  std_logic_vector(31 downto 0)
+            ts_ppsout_g_time_ns_o        : in  std_logic_vector(31 downto 0);
 
+            id_pin_id_pin               : in  std_logic_vector(3 downto 0);
+            version_id_export           : in  std_logic_vector(31 downto 0)
 
         );
     end component art_card_pd;
@@ -212,14 +220,19 @@ begin
             i2c_eeprom_sda_padoen_o     => eeprom_sda_oe,
 
             -- GNSS Serial
-            gnss_serial_stx_pad_o       => gnss_tx,
-            gnss_serial_srx_pad_i       => UART_GNSS_RX,
-            gnss_serial_rts_pad_o       => open,
-            gnss_serial_cts_pad_i       => '1',
-            gnss_serial_dtr_pad_o       => open,
-            gnss_serial_dsr_pad_i       => '1',
-            gnss_serial_ri_pad_i        => '0',
-            gnss_serial_dcd_pad_i       => '1',
+            gnss_uart_srx               => UART_GNSS_RX,
+            gnss_uart_ctsn              => '0',
+            gnss_uart_dsrn              => '0',
+            gnss_uart_rin               => '1',
+            gnss_uart_dcdn              => '0',
+            gnss_uart_stx               => gnss_tx,
+            gnss_uart_dtrn              => open,
+            gnss_uart_rtsn              => open,
+            gnss_uart_out1n             => open,
+            gnss_uart_out2n             => open,
+            gnss_uart_txrdyn            => open,
+            gnss_uart_rxrdyn            => open,
+            gnss_uart_b_clk             => open,
 
             -- Phy2sys
             internal_pps_out_pps_out    => internal_ref_pps,
@@ -242,7 +255,9 @@ begin
             ppsout_gref_pps_ref         => pulse_gnss_r(2),
             ppsout_go_pps_out           => open,
             ts_ppsout_g_time_s_o        => internal_time_s,
-            ts_ppsout_g_time_ns_o       => internal_time_ns
+            ts_ppsout_g_time_ns_o       => internal_time_ns,
+            id_pin_id_pin               => ID,
+            version_id_export           => x"0000000A"
         );
 
     -- Power over Reset
@@ -268,7 +283,7 @@ begin
 
     pcie_npor <= por_rstn;
 
-    -- Register GNSS Pulse in 200MHz
+    -- Register GNSS Pulse at 200MHz
     gnss_pulse_200: process(clk_200m, rst_200m)
     begin
         if (rst_200m = '1') then
