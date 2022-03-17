@@ -16,7 +16,7 @@
 		</bit0>
 	</sof_data>
 	<hex_block>
-		<hex_filename>D:/Travail_Git/art_card_pl_git/art_card/quartus/gold_number_art_card.hex</hex_filename>
+		<hex_filename>gold_number_art_card.hex</hex_filename>
 		<hex_addressing>relative</hex_addressing>
 		<hex_offset>16711680</hex_offset>
 		<hex_little_endian>0</hex_little_endian>
