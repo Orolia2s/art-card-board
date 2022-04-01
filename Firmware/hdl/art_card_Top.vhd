@@ -115,6 +115,34 @@ architecture rtl of art_card_Top is
             gnss_uart_rxrdyn            : out std_logic;
             gnss_uart_b_clk             : out std_logic;
 
+            -- GNSS Spy
+            gnss_spy1_srx               : in  std_logic;
+            gnss_spy1_ctsn              : in  std_logic;
+            gnss_spy1_dsrn              : in  std_logic;
+            gnss_spy1_rin               : in  std_logic;
+            gnss_spy1_dcdn              : in  std_logic;
+            gnss_spy1_stx               : out std_logic;
+            gnss_spy1_dtrn              : out std_logic;
+            gnss_spy1_rtsn              : out std_logic;
+            gnss_spy1_out1n             : out std_logic;
+            gnss_spy1_out2n             : out std_logic;
+            gnss_spy1_txrdyn            : out std_logic;
+            gnss_spy1_rxrdyn            : out std_logic;
+            gnss_spy1_b_clk             : out std_logic;
+            gnss_spy2_srx               : in  std_logic;
+            gnss_spy2_ctsn              : in  std_logic;
+            gnss_spy2_dsrn              : in  std_logic;
+            gnss_spy2_rin               : in  std_logic;
+            gnss_spy2_dcdn              : in  std_logic;
+            gnss_spy2_stx               : out std_logic;
+            gnss_spy2_dtrn              : out std_logic;
+            gnss_spy2_rtsn              : out std_logic;
+            gnss_spy2_out1n             : out std_logic;
+            gnss_spy2_out2n             : out std_logic;
+            gnss_spy2_txrdyn            : out std_logic;
+            gnss_spy2_rxrdyn            : out std_logic;
+            gnss_spy2_b_clk             : out std_logic;
+
             -- Phy2sys
             internal_pps_out_pps_out    : out std_logic;
             ts_phy2sys_time_s_o         : out std_logic_vector(31 downto 0);
@@ -133,17 +161,44 @@ architecture rtl of art_card_Top is
             ts_pps_out_time_ns_o        : in  std_logic_vector(31 downto 0);
 
             -- PPS Output from GNSS
-            ppsout_gref_pps_ref          : in  std_logic;
-            ppsout_go_pps_out            : out std_logic;
-            ts_ppsout_g_time_s_o         : in  std_logic_vector(31 downto 0);
-            ts_ppsout_g_time_ns_o        : in  std_logic_vector(31 downto 0);
+            ppsout_gref_pps_ref         : in  std_logic;
+            ppsout_go_pps_out           : out std_logic;
+            ts_ppsout_g_time_s_o        : in  std_logic_vector(31 downto 0);
+            ts_ppsout_g_time_ns_o       : in  std_logic_vector(31 downto 0);
 
+            -- PPS Input from IO0
+            pps_out_io0_pps_out         : out std_logic;
+            pps_ref_io0_pps_ref         : in  std_logic;
+            ts_ppsout_io0_time_s_o      : in  std_logic_vector(31 downto 0);
+            ts_ppsout_io0_time_ns_o     : in  std_logic_vector(31 downto 0);
+
+            -- PPS Input from IO1
+            pps_out_io1_pps_out         : out std_logic;
+            pps_ref_io1_pps_ref         : in  std_logic;
+            ts_ppsout_io1_time_s_o      : in  std_logic_vector(31 downto 0);
+            ts_ppsout_io1_time_ns_o     : in  std_logic_vector(31 downto 0);
+
+            -- PPS Input from IO2
+            pps_out_io2_pps_out         : out std_logic;
+            pps_ref_io2_pps_ref         : in  std_logic;
+            ts_ppsout_io2_time_s_o      : in  std_logic_vector(31 downto 0);
+            ts_ppsout_io2_time_ns_o     : in  std_logic_vector(31 downto 0);
+
+            -- PPS Input from IO3
+            pps_out_io3_pps_out         : out std_logic;
+            pps_ref_io3_pps_ref         : in  std_logic;
+            ts_ppsout_io3_time_s_o      : in  std_logic_vector(31 downto 0);
+            ts_ppsout_io3_time_ns_o     : in  std_logic_vector(31 downto 0);
+
+            -- ID and Switch Configuration
             id_pin_id_pin               : in  std_logic_vector(3 downto 0);
+            id_pin_id_osc_pin           : in  std_logic_vector(3 downto 0);
+            switch_pin_switch_pin       : out std_logic_vector(5 downto 0);
+            switch_pin_config_io_out    : out std_logic_vector(3 downto 0);
             version_id_export           : in  std_logic_vector(31 downto 0)
 
         );
     end component art_card_pd;
-
 
     signal eeprom_sda_out: std_logic;
     signal eeprom_scl_out: std_logic;
@@ -176,6 +231,16 @@ architecture rtl of art_card_Top is
     signal pps_gnss_r_200: std_logic;
     signal pulse_gnss: std_logic;
     signal pulse_gnss_r: std_logic_vector(2 downto 0);
+
+    signal pps_in_200: std_logic_vector(3 downto 0);
+    signal pps_in_r_200: std_logic_vector(3 downto 0);
+    signal pulse_pps_in: std_logic_vector(3 downto 0);
+    signal pulse_pps_in0_r: std_logic_vector(2 downto 0);
+    signal pulse_pps_in1_r: std_logic_vector(2 downto 0);
+    signal pulse_pps_in2_r: std_logic_vector(2 downto 0);
+    signal pulse_pps_in3_r: std_logic_vector(2 downto 0);
+
+    signal config_io_out: std_logic_vector(3 downto 0);
 
 begin
 
@@ -234,6 +299,34 @@ begin
             gnss_uart_rxrdyn            => open,
             gnss_uart_b_clk             => open,
 
+            gnss_spy1_srx               => UART_GNSS_RX,
+            gnss_spy1_ctsn              => '0',
+            gnss_spy1_dsrn              => '0',
+            gnss_spy1_rin               => '1',
+            gnss_spy1_dcdn              => '0',
+            gnss_spy1_stx               => open,
+            gnss_spy1_dtrn              => open,
+            gnss_spy1_rtsn              => open,
+            gnss_spy1_out1n             => open,
+            gnss_spy1_out2n             => open,
+            gnss_spy1_txrdyn            => open,
+            gnss_spy1_rxrdyn            => open,
+            gnss_spy1_b_clk             => open,
+
+            gnss_spy2_srx               => UART_GNSS_RX,
+            gnss_spy2_ctsn              => '0',
+            gnss_spy2_dsrn              => '0',
+            gnss_spy2_rin               => '1',
+            gnss_spy2_dcdn              => '0',
+            gnss_spy2_stx               => open,
+            gnss_spy2_dtrn              => open,
+            gnss_spy2_rtsn              => open,
+            gnss_spy2_out1n             => open,
+            gnss_spy2_out2n             => open,
+            gnss_spy2_txrdyn            => open,
+            gnss_spy2_rxrdyn            => open,
+            gnss_spy2_b_clk             => open,
+
             -- Phy2sys
             internal_pps_out_pps_out    => internal_ref_pps,
             ts_phy2sys_time_s_o         => internal_time_s,
@@ -256,8 +349,40 @@ begin
             ppsout_go_pps_out           => open,
             ts_ppsout_g_time_s_o        => internal_time_s,
             ts_ppsout_g_time_ns_o       => internal_time_ns,
+
+            -- PPS Input from IO0
+            pps_ref_io0_pps_ref         => pulse_pps_in0_r(2),
+            pps_out_io0_pps_out         => open,
+            ts_ppsout_io0_time_s_o      => internal_time_s,
+            ts_ppsout_io0_time_ns_o     => internal_time_ns,
+
+            -- PPS Input from IO1
+            pps_ref_io1_pps_ref         => pulse_pps_in1_r(2),
+            pps_out_io1_pps_out         => open,
+            ts_ppsout_io1_time_s_o      => internal_time_s,
+            ts_ppsout_io1_time_ns_o     => internal_time_ns,
+
+            -- PPS Input from IO2
+            pps_ref_io2_pps_ref         => pulse_pps_in2_r(2),
+            pps_out_io2_pps_out         => open,
+            ts_ppsout_io2_time_s_o      => internal_time_s,
+            ts_ppsout_io2_time_ns_o     => internal_time_ns,
+
+            -- PPS Input from IO3
+            pps_ref_io3_pps_ref         =>  pulse_pps_in3_r(2),
+            pps_out_io3_pps_out         => open,
+            ts_ppsout_io3_time_s_o      => internal_time_s,
+            ts_ppsout_io3_time_ns_o     => internal_time_ns,
+
+            -- ID and Switch Configuration
+
+
             id_pin_id_pin               => ID,
-            version_id_export           => x"0000000A"
+            id_pin_id_osc_pin           => "0000",
+            switch_pin_switch_pin       => open,
+            switch_pin_config_io_out    => config_io_out,
+            version_id_export           => x"0000000B"
+
         );
 
     -- Power over Reset
@@ -306,6 +431,35 @@ begin
         end if;
     end process gnss_pulse_del;
 
+    -- Register Input PPS Pulse at 200MHz
+    in_pulse_200: process(clk_200m, rst_200m)
+    begin
+        if (rst_200m = '1') then
+            pps_in_200 <= (others => '0');
+            pps_in_r_200 <= (others => '0');
+        elsif rising_edge(clk_200m) then
+            pps_in_200 <= "000" & DCLS_IN;
+            pps_in_r_200 <= pps_in_200;
+            pulse_pps_in <= pps_in_200 and not pps_in_r_200;
+        end if;
+    end process in_pulse_200;
+
+    -- delay IN PPS Pulse
+    pps_pulse_del: process(clk_200m, rst_200m)
+    begin
+        if (rst_200m = '1') then
+            pulse_pps_in0_r <= (others => '0');
+            pulse_pps_in1_r <= (others => '0');
+            pulse_pps_in2_r <= (others => '0');
+            pulse_pps_in3_r <= (others => '0');
+        elsif rising_edge(clk_200m) then
+            pulse_pps_in0_r <= pulse_pps_in0_r(1 downto 0) & pulse_pps_in(0);
+            pulse_pps_in1_r <= pulse_pps_in1_r(1 downto 0) & pulse_pps_in(1);
+            pulse_pps_in2_r <= pulse_pps_in2_r(1 downto 0) & pulse_pps_in(2);
+            pulse_pps_in3_r <= pulse_pps_in3_r(1 downto 0) & pulse_pps_in(3);
+        end if;
+    end process pps_pulse_del;
+
 
     -- LED Assignment
     LED(0) <= GNSS_PPS;
@@ -314,7 +468,8 @@ begin
     LED(3) <= led_error;
 
     -- DCLS Assignment
-    DCLS_OUT <= GNSS_PPS & pps_out;
+    DCLS_OUT(0) <= pps_out when config_io_out(2) = '0' else GNSS_PPS;
+    DCLS_OUT(1) <= pps_out when config_io_out(3) = '0' else GNSS_PPS;
 
     -- EEPROM Assignment
     EEPROM_SCL <= eeprom_scl_out when eeprom_scl_oe = '0' else 'Z';

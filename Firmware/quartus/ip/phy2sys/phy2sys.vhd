@@ -55,7 +55,7 @@ architecture A_phy2sys of phy2sys is
     constant ADDR_ADJ_TIME_SEC_C:   std_logic_vector(7 downto 0) := x"09";
     constant ADDR_OFFSET_TIME_C:    std_logic_vector(7 downto 0) := x"0C";
 
-    constant PHY2SYS_VERSION_C:     std_logic_vector(31 downto 0) := x"0000000A";
+    constant PHY2SYS_VERSION_C:     std_logic_vector(31 downto 0) := x"0000000B";
 
     constant PPS_1S_MEGA_C: std_logic_vector(31 downto 0) := x"3B9ACA00"; --1 000 000 000 ns
     constant PPS_2S_MEGA_C: std_logic_vector(31 downto 0) := x"77359400"; --2 000 000 000 ns

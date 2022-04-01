@@ -1,3 +1,7 @@
+set_location_assignment PIN_AE16 -to OSC_ID[0]
+set_location_assignment PIN_AE17 -to OSC_ID[1]
+set_location_assignment PIN_AD19 -to OSC_ID[2]
+set_location_assignment PIN_AD20 -to OSC_ID[3]
 set_global_assignment -name FAMILY "Cyclone 10 GX"
 set_global_assignment -name TOP_LEVEL_ENTITY art_card_Top
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 20.3.0
@@ -135,3 +139,13 @@ set_global_assignment -name HEX_FILE gold_number_art_card.hex
 set_global_assignment -name IP_FILE ip/art_card_pd/IDBoard_0.ip
 set_global_assignment -name IP_FILE ip/art_card_pd/c10gx_chip_id_0.ip
 set_global_assignment -name IP_FILE ip/art_card_pd/version_id.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/gnss_spy1.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/gnss_spy2.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_in_IO2.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_in_IO3.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_pio_0.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_IOConfig_0.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_in_IO0.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_in_IO1.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_IDBoard_0.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/art_card_pd_c10gx_chip_id_0.ip
