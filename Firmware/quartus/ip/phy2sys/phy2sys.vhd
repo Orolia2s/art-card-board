@@ -39,6 +39,8 @@ entity phy2sys is
         TIME_S_O        : out   std_logic_vector(31 downto 0);
         TIME_NS_O       : out   std_logic_vector(31 downto 0);
 
+		FIRMWARE_VERSION: in    std_logic_vector(31 downto 0);
+
         PPS_OUT         : out   std_logic       -- one pulse at 200MHz
 
     );
@@ -54,8 +56,6 @@ architecture A_phy2sys of phy2sys is
     constant ADDR_ADJ_TIME_NS_C:    std_logic_vector(7 downto 0) := x"08";
     constant ADDR_ADJ_TIME_SEC_C:   std_logic_vector(7 downto 0) := x"09";
     constant ADDR_OFFSET_TIME_C:    std_logic_vector(7 downto 0) := x"0C";
-
-    constant PHY2SYS_VERSION_C:     std_logic_vector(31 downto 0) := x"0000000A";
 
     constant PPS_1S_MEGA_C: std_logic_vector(31 downto 0) := x"3B9ACA00"; --1 000 000 000 ns
     constant PPS_2S_MEGA_C: std_logic_vector(31 downto 0) := x"77359400"; --2 000 000 000 ns
@@ -135,7 +135,7 @@ begin
                     when ADDR_STATUS_C =>
                         data_out <= reg_status;
                     when ADDR_VERSION_C =>
-                        data_out <= PHY2SYS_VERSION_C;
+                        data_out <= FIRMWARE_VERSION;
                     when ADDR_TIME_NS_C =>
                         data_out <= reg_read_ns;
                     when ADDR_TIME_SEC_C =>

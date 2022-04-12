@@ -684,7 +684,7 @@
         <ipxact:parameter parameterId="AUTO_INTERRUPT_RECEIVER_INTERRUPTS_USED" type="string">
           <ipxact:name>AUTO_INTERRUPT_RECEIVER_INTERRUPTS_USED</ipxact:name>
           <ipxact:displayName>Auto INTERRUPTS_USED</ipxact:displayName>
-          <ipxact:value>65304</ipxact:value>
+          <ipxact:value>65400</ipxact:value>
         </ipxact:parameter>
       </ipxact:parameters>
     </altera:altera_module_parameters>
@@ -1162,7 +1162,7 @@
                 &lt;suppliedSystemInfos&gt;
                     &lt;entry&gt;
                         &lt;key&gt;INTERRUPTS_USED&lt;/key&gt;
-                        &lt;value&gt;65304&lt;/value&gt;
+                        &lt;value&gt;65400&lt;/value&gt;
                     &lt;/entry&gt;
                 &lt;/suppliedSystemInfos&gt;
                 &lt;consumedSystemInfos/&gt;

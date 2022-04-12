@@ -125,10 +125,39 @@ architecture rtl of art_card_Top is
             gnss_uart_rxrdyn            : out std_logic;
             gnss_uart_b_clk             : out std_logic;
 
+            -- GNSS Spy
+            gnss_spy1_srx               : in  std_logic;
+            gnss_spy1_ctsn              : in  std_logic;
+            gnss_spy1_dsrn              : in  std_logic;
+            gnss_spy1_rin               : in  std_logic;
+            gnss_spy1_dcdn              : in  std_logic;
+            gnss_spy1_stx               : out std_logic;
+            gnss_spy1_dtrn              : out std_logic;
+            gnss_spy1_rtsn              : out std_logic;
+            gnss_spy1_out1n             : out std_logic;
+            gnss_spy1_out2n             : out std_logic;
+            gnss_spy1_txrdyn            : out std_logic;
+            gnss_spy1_rxrdyn            : out std_logic;
+            gnss_spy1_b_clk             : out std_logic;
+            gnss_spy2_srx               : in  std_logic;
+            gnss_spy2_ctsn              : in  std_logic;
+            gnss_spy2_dsrn              : in  std_logic;
+            gnss_spy2_rin               : in  std_logic;
+            gnss_spy2_dcdn              : in  std_logic;
+            gnss_spy2_stx               : out std_logic;
+            gnss_spy2_dtrn              : out std_logic;
+            gnss_spy2_rtsn              : out std_logic;
+            gnss_spy2_out1n             : out std_logic;
+            gnss_spy2_out2n             : out std_logic;
+            gnss_spy2_txrdyn            : out std_logic;
+            gnss_spy2_rxrdyn            : out std_logic;
+            gnss_spy2_b_clk             : out std_logic;
+
             -- Phy2sys
             internal_pps_out_pps_out    : out std_logic;
             ts_phy2sys_time_s_o         : out std_logic_vector(31 downto 0);
             ts_phy2sys_time_ns_o        : out std_logic_vector(31 downto 0);
+            firmware_version_firmware_version : in  std_logic_vector(31 downto 0);
 
             -- PPS Internal
             ppsout_to_pps_out           : out std_logic;
@@ -181,6 +210,8 @@ architecture rtl of art_card_Top is
 
         );
     end component art_card_pd;
+
+    constant CST_FIRMWARE_VERSION:  std_logic_vector(31 downto 0) := x"0000000C";
 
     signal eeprom_sda_out: std_logic;
     signal eeprom_scl_out: std_logic;
@@ -284,10 +315,39 @@ begin
             gnss_uart_rxrdyn            => open,
             gnss_uart_b_clk             => open,
 
+            gnss_spy1_srx               => UART_GNSS_RX,
+            gnss_spy1_ctsn              => '0',
+            gnss_spy1_dsrn              => '0',
+            gnss_spy1_rin               => '1',
+            gnss_spy1_dcdn              => '0',
+            gnss_spy1_stx               => open,
+            gnss_spy1_dtrn              => open,
+            gnss_spy1_rtsn              => open,
+            gnss_spy1_out1n             => open,
+            gnss_spy1_out2n             => open,
+            gnss_spy1_txrdyn            => open,
+            gnss_spy1_rxrdyn            => open,
+            gnss_spy1_b_clk             => open,
+
+            gnss_spy2_srx               => UART_GNSS_RX,
+            gnss_spy2_ctsn              => '0',
+            gnss_spy2_dsrn              => '0',
+            gnss_spy2_rin               => '1',
+            gnss_spy2_dcdn              => '0',
+            gnss_spy2_stx               => open,
+            gnss_spy2_dtrn              => open,
+            gnss_spy2_rtsn              => open,
+            gnss_spy2_out1n             => open,
+            gnss_spy2_out2n             => open,
+            gnss_spy2_txrdyn            => open,
+            gnss_spy2_rxrdyn            => open,
+            gnss_spy2_b_clk             => open,
+
             -- Phy2sys
             internal_pps_out_pps_out    => internal_ref_pps,
             ts_phy2sys_time_s_o         => internal_time_s,
             ts_phy2sys_time_ns_o        => internal_time_ns,
+            firmware_version_firmware_version => CST_FIRMWARE_VERSION,
 
             -- PPS Internal
             ppsout_tref_pps_ref         => internal_ref_pps,
@@ -338,7 +398,7 @@ begin
             id_pin_id_osc_pin           => OSC_ID,
             switch_pin_switch_pin       => SEL_IO,
             switch_pin_config_io_out    => config_io_out,
-            version_id_export           => x"0000000A"
+            version_id_export           => CST_FIRMWARE_VERSION
 
         );
 

@@ -20,6 +20,7 @@ derive_clock_uncertainty
 
 # change domain
 set_false_path -from [get_clocks {u0|pcie_endpoint|wys~CORE_CLK_OUT}] -to [get_clocks {clk_200m}]
+set_false_path -from [get_clocks {u0|pcie_endpoint|wys~CORE_CLK_OUT}] -to [get_clocks {clkpll_50m}]
 set_false_path -from [get_clocks {clk_200m}]   -to [get_clocks {u0|pcie_endpoint|wys~CORE_CLK_OUT}]
 set_false_path -from [get_clocks {clkpll_50m}] -to [get_clocks {u0|pcie_endpoint|wys~CORE_CLK_OUT}]
 set_false_path -from [get_clocks {flash_clk}]  -to [get_clocks {u0|pcie_endpoint|wys~CORE_CLK_OUT}]
