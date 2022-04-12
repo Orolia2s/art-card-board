@@ -20,6 +20,7 @@ derive_clock_uncertainty
 
 # change domain
 set_false_path -from [get_clocks {u0|pcie_endpoint|wys~CORE_CLK_OUT}] -to [get_clocks {clk_200m}]
+set_false_path -from [get_clocks {u0|pcie_endpoint|wys~CORE_CLK_OUT}] -to [get_clocks {clkpll_50m}]
 set_false_path -from [get_clocks {clk_200m}]   -to [get_clocks {u0|pcie_endpoint|wys~CORE_CLK_OUT}]
 set_false_path -from [get_clocks {clkpll_50m}] -to [get_clocks {u0|pcie_endpoint|wys~CORE_CLK_OUT}]
 set_false_path -from [get_clocks {flash_clk}]  -to [get_clocks {u0|pcie_endpoint|wys~CORE_CLK_OUT}]
@@ -37,6 +38,7 @@ set_false_path -from * -to [get_ports {LED*}]
 set_false_path -from [get_ports {ID* }] -to *
 set_false_path -from [get_ports {OSC_ID* }] -to *
 set_false_path -from [get_ports {GPIO* }] -to *
+set_false_path -from [get_ports {DCLS_IN* }] -to *
 set_false_path -from [get_ports {OSC_SDA OSC_SCL}] -to *
 set_false_path -from [get_ports {EEPROM_SDA EEPROM_SCL}] -to *
 set_false_path -from [get_ports {OSC_PPS_OUT OSC_BITE GNSS_PPS }] -to *

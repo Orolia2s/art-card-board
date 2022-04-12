@@ -832,7 +832,13 @@
       <ipxact:version>1.0</ipxact:version>
     </altera:entity_info>
     <altera:altera_module_parameters>
-      <ipxact:parameters></ipxact:parameters>
+      <ipxact:parameters>
+        <ipxact:parameter parameterId="PPS_DELAY_200" type="string">
+          <ipxact:name>PPS_DELAY_200</ipxact:name>
+          <ipxact:displayName>PPS_DELAY_200</ipxact:displayName>
+          <ipxact:value>35</ipxact:value>
+        </ipxact:parameter>
+      </ipxact:parameters>
     </altera:altera_module_parameters>
     <altera:altera_system_parameters>
       <ipxact:parameters>

@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- 
+--
 -- mro50 : PCIe mRO50 driver of the ART_CARD FGPA.
 -- Copyright (C) 2021  Spectracom SAS
 --
@@ -14,7 +14,7 @@
 -- You should have received a copy of the GNU Lesser General Public
 -- License along with this library; if not, write to the Free Software
 -- Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
--- 
+--
 --------------------------------------------------------------------------------
 
 library ieee;
@@ -170,6 +170,9 @@ architecture rtl_mro50 of mro50 is
     signal bit_lock:            std_logic;
     signal bit_enable:          std_logic;
     signal bit_save:            std_logic;
+    signal bit_auto_read:       std_logic;
+    signal bit_err_timeout:     std_logic;
+    signal bit_err_size:        std_logic;
 
     signal ack_bit_freq_read:   std_logic;
     signal ack_bit_freq_done:   std_logic;
@@ -185,7 +188,8 @@ architecture rtl_mro50 of mro50 is
     signal message: t_message;
 
     signal s_error: std_logic;
-    signal t_error: std_logic;
+    signal t_error_time: std_logic;
+    signal t_error_size: std_logic;
     signal cpt_error: unsigned(23 downto 0);
 
 begin
@@ -204,16 +208,24 @@ begin
             bit_enable          <= '0';
             bit_freq_read_done  <= '0';
             bit_save            <= '0';
+            bit_err_timeout     <= '0';
+            bit_err_size        <= '0';
         elsif rising_edge(CLK_I) then
             DATA_O <= (others => '0');
             bit_freq_read <= bit_freq_read and not ack_bit_freq_read;
             bit_freq_adj <= bit_freq_adj and not ack_bit_freq_adj;
             bit_freq_read_done <= bit_freq_read_done or ack_bit_freq_done;
             bit_save <= bit_save and not ack_bit_save;
+            bit_err_timeout <= bit_err_timeout or t_error_time;
+            bit_err_size <= bit_err_size or t_error_size;
             if (RD_I = '1') then
                 case ADDR_I is
                     when CST_ADDR_OSC_CMD =>
-                        DATA_O <= x"000000" &
+                        DATA_O <= bit_auto_read &
+                            bit_err_timeout &
+                            bit_err_size &
+                            "0" &
+                            x"00000" &
                             bit_save &
                             bit_freq_adj_type &
                             bit_freq_adj &
@@ -222,6 +234,8 @@ begin
                             bit_freq_read &
                             bit_lock &
                             bit_enable;
+                        bit_err_timeout <= '0';
+                        bit_err_size <= '0';
                     when CST_ADDR_OSC_VALUE =>
                         DATA_O <= reg_osc_value;
                         bit_freq_read_done <= '0';
@@ -236,12 +250,13 @@ begin
             if (WR_I = '1') then
                 case ADDR_I is
                     when CST_ADDR_OSC_CMD =>
-                        bit_save            <= DATA_I(7);
-                        bit_freq_adj_type   <= DATA_I(6);
-                        bit_freq_adj        <= DATA_I(5);
-                        bit_freq_read_type  <= DATA_I(3);
-                        bit_freq_read       <= DATA_I(2);
-                        bit_enable          <= DATA_I(0);
+                        bit_save            <= DATA_I(7);   -- request save operation
+                        bit_freq_adj_type   <= DATA_I(6);   -- select fine or coarse for the write
+                        bit_freq_adj        <= DATA_I(5);   -- request write fine or coarse operation
+                        bit_freq_read_type  <= DATA_I(3);   -- select fine or coarse for the read
+                        bit_freq_read       <= DATA_I(2);   -- request read fine or coarse operation
+                        bit_enable          <= DATA_I(0);   -- not used
+                        bit_freq_read_done  <= '0';         -- set '0' when write on register
                     when CST_ADDR_OSC_ADJUST =>
                         reg_osc_adjust <= DATA_I;
                     when others =>
@@ -254,6 +269,7 @@ begin
     -- Status update
     ----------------
     bit_lock <= reg_status(14);
+    bit_auto_read <= '1' when (treat = CST_TREAT_READ_STATUS) else '0';
 
     -- loop request
     ---------------
@@ -296,9 +312,11 @@ begin
             reg_osc_value <= (others => '0');
             reg_temperature <= (others => '0');
             reg_status <= (others => '0');
-            t_error <= '0';
+            t_error_time <= '0';
+            t_error_size <= '0';
         elsif rising_edge(CLK_I) then
-            t_error <= '0';
+            t_error_time <= '0';
+            t_error_size <= '0';
             resp_timeout <= resp_timeout + 1;
             data_en_out <= '0';
             ack_bit_freq_read <= '0';
@@ -378,35 +396,52 @@ begin
                 when WAIT_RESPONSE =>
                     resp_timeout <= (others => '0');
                     cpt_receive <= (others => '0');
+                    -- default waiting response
                     Sending_State <= WAIT_CHAR;
                 when WAIT_CHAR =>
                     if (data_en_in = '1') then
-                        --detect end of frame
-                        if ((data_receive = x"0D") or (data_receive = x"0A")) then
+                        -- detect end of frame on <LF>
+                        if (data_receive = x"0A") then
+                            -- if no response expected
                             if (expected_resp = CST_RESP_00B) then
+                                if (treat = CST_TREAT_ADJ_FINE) or (treat = CST_TREAT_ADJ_COARSE) then
+                                    ack_bit_freq_adj <= '1';
+                                end if;
+                                if (treat = CST_TREAT_PLL_SAVE) then
+                                    ack_bit_save <= '1';
+                                end if;
                                 Sending_State <= PRE_WAIT;
-                                ack_bit_freq_adj <= '1';
-                                ack_bit_save <= '1';
                                 treat <= CST_TREAT_READ_NOTHING;
-                            end if;
-                            if (cpt_receive = expected_resp) then
-                                --full frame received
-                                Sending_State <= STORE_DATA;
+                            -- expected response
                             else
-                                -- error
-                                t_error <= '1';
-                                ack_bit_freq_adj <= '1';
-                                ack_bit_freq_read <= '1';
-                                ack_bit_save <= '1';
-                                Sending_State <= PRE_WAIT;
+                                if (cpt_receive = expected_resp) then
+                                    --full frame received
+                                    Sending_State <= STORE_DATA;
+                                else
+                                    -- error
+                                    t_error_size <= '1';
+                                    Sending_State <= PRE_WAIT;
+                                end if;
                             end if;
                         else
-                            Sending_State <= RECEIVE_CHAR;
+                        -- ignore <CR>
+                            if (data_receive /= x"0D") then
+                                Sending_State <= RECEIVE_CHAR;
+                            end if;
                         end if;
                     end if;
                     if (resp_timeout = CST_COUNT_2HZ) then
-                        t_error <= '1';
-                        ack_bit_freq_read <= '1';
+                        if (expected_resp = CST_RESP_00B) then
+                            -- acknowledge 00 response (considering OK)
+                            if (treat = CST_TREAT_ADJ_FINE) or (treat = CST_TREAT_ADJ_COARSE) then
+                                ack_bit_freq_adj <= '1';
+                            end if;
+                            if (treat = CST_TREAT_PLL_SAVE) then
+                                ack_bit_save <= '1';
+                            end if;
+                        else
+                            t_error_time <= '1';
+                        end if;
                         Sending_State <= PRE_WAIT;
                     end if;
                 when RECEIVE_CHAR =>
@@ -571,7 +606,7 @@ begin
             if (cpt_error /= x"000000") then
                 cpt_error <= cpt_error - 1;
             else
-                if (t_error = '1') then
+                if (t_error_time = '1') or (t_error_size = '1') then
                     cpt_error <= (others => '1');
                 end if;
             end if;

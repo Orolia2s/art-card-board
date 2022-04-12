@@ -22,6 +22,9 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.NUMERIC_STD.all;
 
 entity pps_out_ctrl is
+    generic (
+        PPS_DELAY_200   : std_logic_vector(31 downto 0) := x"00000023"  --000 000 035    ns
+    );
     port (
         -- General signals
         CLK_CPU_I       : in    std_logic;
@@ -55,7 +58,6 @@ architecture A_pps_out_ctrl of pps_out_ctrl is
     constant ADDR_WIDTH_C:          std_logic_vector(7 downto 0) := x"13";
 
     constant PPS_PER_SECOND_200: unsigned(31 downto 0) := x"3B9AC9FB"; --999 999 995    ns
-    constant PPS_DELAY_200:      unsigned(31 downto 0) := x"00000023"; --000 000 035    ns
     constant HMS_PER_SECOND_200: unsigned(31 downto 0) := x"05F5E0FB"; --099 999 995    ns
 
     signal cpt_pps: unsigned(31 downto 0);
@@ -154,7 +156,7 @@ begin
                 pps_o <= '1';
             end if;
             if (PPS_REF = '1') then
-                cpt_pps <= PPS_DELAY_200;
+                cpt_pps <= unsigned(PPS_DELAY_200);
                 pps_o <= '1';
             end if;
         end if;

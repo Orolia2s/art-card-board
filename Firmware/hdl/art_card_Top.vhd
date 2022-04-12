@@ -147,6 +147,7 @@ architecture rtl of art_card_Top is
             internal_pps_out_pps_out    : out std_logic;
             ts_phy2sys_time_s_o         : out std_logic_vector(31 downto 0);
             ts_phy2sys_time_ns_o        : out std_logic_vector(31 downto 0);
+            firmware_version_firmware_version : in  std_logic_vector(31 downto 0);
 
             -- PPS Internal
             ppsout_to_pps_out           : out std_logic;
@@ -199,6 +200,8 @@ architecture rtl of art_card_Top is
 
         );
     end component art_card_pd;
+
+    constant CST_FIRMWARE_VERSION:  std_logic_vector(31 downto 0) := x"0000000C";
 
     signal eeprom_sda_out: std_logic;
     signal eeprom_scl_out: std_logic;
@@ -331,6 +334,7 @@ begin
             internal_pps_out_pps_out    => internal_ref_pps,
             ts_phy2sys_time_s_o         => internal_time_s,
             ts_phy2sys_time_ns_o        => internal_time_ns,
+            firmware_version_firmware_version => CST_FIRMWARE_VERSION,
 
             -- PPS Internal
             ppsout_tref_pps_ref         => internal_ref_pps,
@@ -381,7 +385,7 @@ begin
             id_pin_id_osc_pin           => "0000",
             switch_pin_switch_pin       => open,
             switch_pin_config_io_out    => config_io_out,
-            version_id_export           => x"0000000B"
+            version_id_export           => CST_FIRMWARE_VERSION
 
         );
 
