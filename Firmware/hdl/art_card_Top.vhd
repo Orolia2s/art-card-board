@@ -143,6 +143,20 @@ architecture rtl of art_card_Top is
             gnss_spy2_rxrdyn            : out std_logic;
             gnss_spy2_b_clk             : out std_logic;
 
+            mro_uart_srx                : in  std_logic;
+            mro_uart_ctsn               : in  std_logic;
+            mro_uart_dsrn               : in  std_logic;
+            mro_uart_rin                : in  std_logic;
+            mro_uart_dcdn               : in  std_logic;
+            mro_uart_stx                : out std_logic;
+            mro_uart_dtrn               : out std_logic;
+            mro_uart_rtsn               : out std_logic;
+            mro_uart_out1n              : out std_logic;
+            mro_uart_out2n              : out std_logic;
+            mro_uart_txrdyn             : out std_logic;
+            mro_uart_rxrdyn             : out std_logic;
+            mro_uart_b_clk              : out std_logic;
+
             -- Phy2sys
             internal_pps_out_pps_out    : out std_logic;
             ts_phy2sys_time_s_o         : out std_logic_vector(31 downto 0);
@@ -192,6 +206,7 @@ architecture rtl of art_card_Top is
             ts_ppsout_io3_time_ns_o     : in  std_logic_vector(31 downto 0);
 
             -- ID and Switch Configuration
+            firm_config_export          : out std_logic_vector(31 downto 0);
             id_pin_id_pin               : in  std_logic_vector(3 downto 0);
             id_pin_id_osc_pin           : in  std_logic_vector(3 downto 0);
             switch_pin_switch_pin       : out std_logic_vector(5 downto 0);
@@ -201,7 +216,7 @@ architecture rtl of art_card_Top is
         );
     end component art_card_pd;
 
-    constant CST_FIRMWARE_VERSION:  std_logic_vector(31 downto 0) := x"0000000C";
+    constant CST_FIRMWARE_VERSION:  std_logic_vector(31 downto 0) := x"0000000D";
 
     signal eeprom_sda_out: std_logic;
     signal eeprom_scl_out: std_logic;
@@ -244,6 +259,10 @@ architecture rtl of art_card_Top is
     signal pulse_pps_in3_r: std_logic_vector(2 downto 0);
 
     signal config_io_out: std_logic_vector(3 downto 0);
+
+    signal debug_mro_rx: std_logic;
+    signal debug_mro_tx: std_logic;
+    signal firm_config: std_logic_vector(31 downto 0);
 
 begin
 
@@ -330,6 +349,20 @@ begin
             gnss_spy2_rxrdyn            => open,
             gnss_spy2_b_clk             => open,
 
+            mro_uart_srx                => debug_mro_rx,
+            mro_uart_ctsn               => '0',
+            mro_uart_dsrn               => '0',
+            mro_uart_rin                => '1',
+            mro_uart_dcdn               => '0',
+            mro_uart_stx                => debug_mro_tx,
+            mro_uart_dtrn               => open,
+            mro_uart_rtsn               => open,
+            mro_uart_out1n              => open,
+            mro_uart_out2n              => open,
+            mro_uart_txrdyn             => open,
+            mro_uart_rxrdyn             => open,
+            mro_uart_b_clk              => open,
+
             -- Phy2sys
             internal_pps_out_pps_out    => internal_ref_pps,
             ts_phy2sys_time_s_o         => internal_time_s,
@@ -379,7 +412,7 @@ begin
             ts_ppsout_io3_time_ns_o     => internal_time_ns,
 
             -- ID and Switch Configuration
-
+            firm_config_export          => firm_config,
 
             id_pin_id_pin               => ID,
             id_pin_id_osc_pin           => "0000",
@@ -484,8 +517,10 @@ begin
     OSC_SDA <= 'Z';
 
     -- UART Assignment
-    UART_OSC_TX <= not sUART_OSC_TX;
-    sUART_OSC_RX <= not UART_OSC_RX;
+    UART_OSC_TX <= not sUART_OSC_TX when firm_config(0) = '0' else not debug_mro_tx;
+    sUART_OSC_RX <= not UART_OSC_RX when firm_config(0) = '0' else '0';
+    debug_mro_rx <= not UART_OSC_RX when firm_config(0) = '1' else '0';
+
     UART_GNSS_TX <= gnss_tx;
 
     -- Test Point

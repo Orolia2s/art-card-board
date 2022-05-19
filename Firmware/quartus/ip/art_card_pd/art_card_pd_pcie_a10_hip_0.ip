@@ -5128,7 +5128,7 @@
         <ipxact:parameter parameterId="revision_id_hwtcl" type="int">
           <ipxact:name>revision_id_hwtcl</ipxact:name>
           <ipxact:displayName>Revision ID</ipxact:displayName>
-          <ipxact:value>0</ipxact:value>
+          <ipxact:value>3</ipxact:value>
         </ipxact:parameter>
         <ipxact:parameter parameterId="class_code_hwtcl" type="int">
           <ipxact:name>class_code_hwtcl</ipxact:name>
