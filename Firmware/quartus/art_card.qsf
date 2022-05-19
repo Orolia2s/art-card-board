@@ -211,3 +211,5 @@ set_global_assignment -name HEX_FILE gold_number_art_card.hex
 set_global_assignment -name IP_FILE ip/art_card_pd/gnss_uart.ip
 set_global_assignment -name IP_FILE ip/art_card_pd/gnss_spy1.ip
 set_global_assignment -name IP_FILE ip/art_card_pd/gnss_spy2.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/mro_uart.ip
+set_global_assignment -name IP_FILE ip/art_card_pd/firm_config.ip

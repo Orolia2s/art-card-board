@@ -94,9 +94,12 @@ architecture rtl_mro50 of mro50 is
     constant    CST_ADDR_OSC_VALUE:     std_logic_vector(7 downto 0) := x"01";
     constant    CST_ADDR_OSC_ADJUST:    std_logic_vector(7 downto 0) := x"02";
     constant    CST_ADDR_TEMPERATURE:   std_logic_vector(7 downto 0) := x"03";
+    constant    CST_ADDR_MRO_A:         std_logic_vector(7 downto 0) := x"04";
+    constant    CST_ADDR_MRO_B:         std_logic_vector(7 downto 0) := x"05";
 
     constant    CST_COUNT_1HZ: unsigned(27 downto 0) := unsigned(to_unsigned(g_freq_in/1,28));
     constant    CST_COUNT_2HZ: unsigned(27 downto 0) := unsigned(to_unsigned(g_freq_in/2,28));
+    constant    CST_COUNT_30S: unsigned(4 downto 0)  := "11111";
 
     -- Micro code ROM
     -------------------
@@ -115,16 +118,29 @@ architecture rtl_mro50 of mro50 is
         -- FDXXXXXXXX\r             -- pos: 56
         'F','D', C130, C131, C132, C133, C134, C135, C136, C137, cr,
         -- PLL SAVE\n               -- pos: 67
-        'P','L','L',' ','S','A','V','E', cr
+        'P','L','L',' ','S','A','V','E', cr,
+        -- MON_tpcbPIL_cfieldA00000000\r    --pos: 76
+        'M','O','N','_','t','p','c','b','P','I','L','_','c','f','i','e','l','d','A', '0', '0', '0', '0', '0', '0', '0', '0', cr,
+        -- MON_tpcbPIL_cfieldB00000000\r    --pos: 104
+        'M','O','N','_','t','p','c','b','P','I','L','_','c','f','i','e','l','d','B', '0', '0', '0', '0', '0', '0', '0', '0', cr,
+        -- MON_tpcbPIL_cfieldA\r    --pos: 132
+        'M','O','N','_','t','p','c','b','P','I','L','_','c','f','i','e','l','d','A', cr,
+        -- MON_tpcbPIL_cfieldB\r    --pos: 152
+        'M','O','N','_','t','p','c','b','P','I','L','_','c','f','i','e','l','d','B', cr
+        -- pos : 172
         );
 
-    signal ptr_Rom: integer range 0 to 127;
+    signal ptr_Rom: integer range 0 to 255;
     constant CST_PTR_READ_STATUS:   integer := 0;
     constant CST_PTR_READ_FINE:     integer := 9;
     constant CST_PTR_READ_COARSE:   integer := 29;
     constant CST_PTR_WRITE_FINE:    integer := 32;
     constant CST_PTR_WRITE_COARSE:  integer := 56;
     constant CST_PTR_PLL_SAVE:      integer := 67;
+    constant CST_PTR_SET_A0:        integer := 76;
+    constant CST_PTR_SET_B0:        integer := 104;
+    constant CST_PTR_READ_A:        integer := 132;
+    constant CST_PTR_READ_B:        integer := 152;
 
     constant CST_RESP_60B:          unsigned(5 downto 0) := "111100";
     constant CST_RESP_08B:          unsigned(5 downto 0) := "001000";
@@ -138,6 +154,8 @@ architecture rtl_mro50 of mro50 is
     constant CST_TREAT_ADJ_COARSE:      std_logic_vector(3 downto 0) := x"4";
     constant CST_TREAT_READ_STATUS:     std_logic_vector(3 downto 0) := x"5";
     constant CST_TREAT_PLL_SAVE:        std_logic_vector(3 downto 0) := x"6";
+    constant CST_TREAT_READ_A:          std_logic_vector(3 downto 0) := x"7";
+    constant CST_TREAT_READ_B:          std_logic_vector(3 downto 0) := x"8";
 
     TYPE Sending_State_type IS (PRE_WAIT, WAITING, SENDING_DATA, WAIT_UART_START, WAIT_UART_STOP, WAIT_RESPONSE,
                                 WAIT_CHAR, RECEIVE_CHAR, STORE_DATA);
@@ -173,6 +191,7 @@ architecture rtl_mro50 of mro50 is
     signal bit_auto_read:       std_logic;
     signal bit_err_timeout:     std_logic;
     signal bit_err_size:        std_logic;
+    signal bit_err_unknow:      std_logic;
 
     signal ack_bit_freq_read:   std_logic;
     signal ack_bit_freq_done:   std_logic;
@@ -184,15 +203,39 @@ architecture rtl_mro50 of mro50 is
     signal reg_temperature:     std_logic_vector(15 downto 0);
     signal reg_status:          std_logic_vector(15 downto 0);
 
+    signal reg_mro_a:           std_logic_vector(31 downto 0);
+    signal reg_mro_b:           std_logic_vector(31 downto 0);
+
     TYPE t_message IS ARRAY  ( integer range 0 to 63 ) OF std_logic_vector(3 downto 0);
     signal message: t_message;
 
     signal s_error: std_logic;
     signal t_error_time: std_logic;
     signal t_error_size: std_logic;
+    signal t_error_unknow: std_logic;
     signal cpt_error: unsigned(23 downto 0);
+    signal cpt_wait_mro: unsigned(4 downto 0);
+    signal running_mro: std_logic;
+    signal preinit_cnt: std_logic_vector(2 downto 0);
 
 begin
+
+    -- Waiting time mro (30s)
+    process (RST_I, CLK_I)
+    begin
+        if (RST_I = '1') then
+            cpt_wait_mro <= CST_COUNT_30S;
+            running_mro <= '0';
+        elsif rising_edge(CLK_I) then
+            if (tick_loop = '1') then
+                if (cpt_wait_mro /= "00000") then
+                    cpt_wait_mro <= cpt_wait_mro - 1;
+                else
+                    running_mro <= '1';
+                end if;
+            end if;
+        end if;
+    end process;
 
     -- CPU access
     -------------
@@ -213,18 +256,19 @@ begin
         elsif rising_edge(CLK_I) then
             DATA_O <= (others => '0');
             bit_freq_read <= bit_freq_read and not ack_bit_freq_read;
-            bit_freq_adj <= bit_freq_adj and not ack_bit_freq_adj;
+            bit_freq_adj  <= bit_freq_adj  and not ack_bit_freq_adj;
+            bit_save      <= bit_save      and not ack_bit_save;
             bit_freq_read_done <= bit_freq_read_done or ack_bit_freq_done;
-            bit_save <= bit_save and not ack_bit_save;
-            bit_err_timeout <= bit_err_timeout or t_error_time;
-            bit_err_size <= bit_err_size or t_error_size;
+            bit_err_timeout    <= bit_err_timeout    or t_error_time;
+            bit_err_size       <= bit_err_size       or t_error_size;
+            bit_err_unknow     <= bit_err_unknow     or t_error_unknow;
             if (RD_I = '1') then
                 case ADDR_I is
                     when CST_ADDR_OSC_CMD =>
                         DATA_O <= bit_auto_read &
                             bit_err_timeout &
                             bit_err_size &
-                            "0" &
+                            bit_err_unknow &
                             x"00000" &
                             bit_save &
                             bit_freq_adj_type &
@@ -236,6 +280,7 @@ begin
                             bit_enable;
                         bit_err_timeout <= '0';
                         bit_err_size <= '0';
+                        bit_err_unknow <= '0';
                     when CST_ADDR_OSC_VALUE =>
                         DATA_O <= reg_osc_value;
                         bit_freq_read_done <= '0';
@@ -243,6 +288,10 @@ begin
                         DATA_O <= reg_osc_adjust;
                     when CST_ADDR_TEMPERATURE =>
                         DATA_O <= x"0000" & reg_temperature;
+                    when CST_ADDR_MRO_A =>
+                        DATA_O <= reg_mro_a;
+                    when CST_ADDR_MRO_B =>
+                        DATA_O <= reg_mro_b;
                     when others =>
                         null;
                 end case;
@@ -255,7 +304,7 @@ begin
                         bit_freq_adj        <= DATA_I(5);   -- request write fine or coarse operation
                         bit_freq_read_type  <= DATA_I(3);   -- select fine or coarse for the read
                         bit_freq_read       <= DATA_I(2);   -- request read fine or coarse operation
-                        bit_enable          <= DATA_I(0);   -- not used
+                        bit_enable          <= DATA_I(0) and running_mro;   -- not used
                         bit_freq_read_done  <= '0';         -- set '0' when write on register
                     when CST_ADDR_OSC_ADJUST =>
                         reg_osc_adjust <= DATA_I;
@@ -308,15 +357,20 @@ begin
             treat <= CST_TREAT_READ_NOTHING;
             ptr_hex <= (others => '0');
 
+            preinit_cnt <= "000";
+
             cpt_receive <= (others => '0');
             reg_osc_value <= (others => '0');
             reg_temperature <= (others => '0');
             reg_status <= (others => '0');
+            reg_mro_a <= (others => '1');           -- by default to xFFFFFFFF
+            reg_mro_b <= (others => '1');           -- by default to xFFFFFFFF
             t_error_time <= '0';
             t_error_size <= '0';
         elsif rising_edge(CLK_I) then
             t_error_time <= '0';
             t_error_size <= '0';
+            t_error_unknow <= '0';
             resp_timeout <= resp_timeout + 1;
             data_en_out <= '0';
             ack_bit_freq_read <= '0';
@@ -364,11 +418,38 @@ begin
                             treat <= CST_TREAT_PLL_SAVE;
                             Sending_State <= SENDING_DATA;
                         -- automatic read of status
-                        elsif (tick_loop = '1') then
-                            expected_resp <= CST_RESP_60B;
-                            ptr_Rom <= CST_PTR_READ_STATUS;
-                            treat <= CST_TREAT_READ_STATUS;
-                            Sending_State <= SENDING_DATA;
+                        elsif (tick_loop = '1') and (running_mro = '1') then
+                            case preinit_cnt is
+                                when "000" =>
+                                    preinit_cnt <= "001";
+                                    expected_resp <= CST_RESP_00B;
+                                    ptr_Rom <= CST_PTR_SET_A0;
+                                    treat <= CST_TREAT_READ_NOTHING;
+                                    Sending_State <= SENDING_DATA;
+                                when "001" =>
+                                    preinit_cnt <= "010";
+                                    expected_resp <= CST_RESP_00B;
+                                    ptr_Rom <= CST_PTR_SET_B0;
+                                    treat <= CST_TREAT_READ_NOTHING;
+                                    Sending_State <= SENDING_DATA;
+                                when "010" =>
+                                    preinit_cnt <= "011";
+                                    expected_resp <= CST_RESP_08B;
+                                    ptr_Rom <= CST_PTR_READ_A;
+                                    treat <= CST_TREAT_READ_A;
+                                    Sending_State <= SENDING_DATA;
+                                when "011" =>
+                                    preinit_cnt <= "100";
+                                    expected_resp <= CST_RESP_08B;
+                                    ptr_Rom <= CST_PTR_READ_B;
+                                    treat <= CST_TREAT_READ_B;
+                                    Sending_State <= SENDING_DATA;
+                                when others =>
+                                    expected_resp <= CST_RESP_60B;
+                                    ptr_Rom <= CST_PTR_READ_STATUS;
+                                    treat <= CST_TREAT_READ_STATUS;
+                                    Sending_State <= SENDING_DATA;
+                            end case;
                         end if;
                     end if;
                 when SENDING_DATA =>
@@ -403,7 +484,7 @@ begin
                         -- detect end of frame on <LF>
                         if (data_receive = x"0A") then
                             -- if no response expected
-                            if (expected_resp = CST_RESP_00B) then
+                            if ((cpt_receive = "000000") and (expected_resp = CST_RESP_00B)) then
                                 if (treat = CST_TREAT_ADJ_FINE) or (treat = CST_TREAT_ADJ_COARSE) then
                                     ack_bit_freq_adj <= '1';
                                 end if;
@@ -427,6 +508,11 @@ begin
                         -- ignore <CR>
                             if (data_receive /= x"0D") then
                                 Sending_State <= RECEIVE_CHAR;
+                            end if;
+                        -- detect ?
+                            if (data_receive = x"3F") then
+                                t_error_unknow <= '1';
+                                Sending_State <= PRE_WAIT;
                             end if;
                         end if;
                     end if;
@@ -452,21 +538,29 @@ begin
                         Sending_State <= PRE_WAIT;
                     end if;
                 when STORE_DATA =>
-                    if (treat = CST_TREAT_READ_COARSE) then
-                        reg_osc_value   <= message(0) & message(1) & message(2) & message(3) &
+                    case treat is
+                        when CST_TREAT_READ_COARSE =>
+                            reg_osc_value   <= message(0) & message(1) & message(2) & message(3) &
+                                                message(4) & message(5) & message(6) & message(7);
+                            ack_bit_freq_read <= '1';
+                            ack_bit_freq_done <= '1';
+                        when CST_TREAT_READ_FINE =>
+                            reg_osc_value   <= x"0000" &
+                                                message(0) & message(1) & message(2) & message(3);
+                            ack_bit_freq_read <= '1';
+                            ack_bit_freq_done <= '1';
+                        when CST_TREAT_READ_STATUS =>
+                            reg_temperature <= message(52) & message(53) & message(54) & message(55);
+                            reg_status      <= message(56) & message(57) & message(58) & message(59);
+                        when CST_TREAT_READ_A =>
+                            reg_mro_a <= message(0) & message(1) & message(2) & message(3) &
                                             message(4) & message(5) & message(6) & message(7);
-                        ack_bit_freq_read <= '1';
-                        ack_bit_freq_done <= '1';
-                    elsif (treat = CST_TREAT_READ_FINE) then
-                        reg_osc_value   <= x"0000" &
-                                            message(0) & message(1) & message(2) & message(3);
-                        ack_bit_freq_read <= '1';
-                        ack_bit_freq_done <= '1';
-                    end if;
-                    if (treat = CST_TREAT_READ_STATUS) then
-                        reg_temperature <= message(52) & message(53) & message(54) & message(55);
-                        reg_status      <= message(56) & message(57) & message(58) & message(59);
-                    end if;
+                        when CST_TREAT_READ_B =>
+                            reg_mro_b <= message(0) & message(1) & message(2) & message(3) &
+                                            message(4) & message(5) & message(6) & message(7);
+                        when others =>
+                            null;
+                    end case;
                     treat <= CST_TREAT_READ_NOTHING;
                     Sending_State <= PRE_WAIT;
                 when others =>
