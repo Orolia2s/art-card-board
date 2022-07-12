@@ -89,10 +89,10 @@ begin
     process (RST_I, CLK_I)
     begin
         if (RST_I = '1') then
-            reg_io0 <= CST_IO_IN_1PPS;
+            reg_io0 <= CST_IO_OUT_10MHZ;
             reg_io1 <= CST_IO_IN_1PPS;
-            reg_io2 <= CST_IO_IN_1PPS;
-            reg_io3 <= CST_IO_IN_1PPS;
+            reg_io2 <= CST_IO_OUT_GNSS;
+            reg_io3 <= CST_IO_OUT_1PPS;
             DATA_O <= (others => '0');
         elsif rising_edge(CLK_I) then
             DATA_O <= (others => '0');
