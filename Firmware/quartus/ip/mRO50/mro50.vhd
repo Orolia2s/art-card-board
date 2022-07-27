@@ -419,37 +419,37 @@ begin
                             Sending_State <= SENDING_DATA;
                         -- automatic read of status
                         elsif (tick_loop = '1') and (running_mro = '1') then
-                            case preinit_cnt is
-                                when "000" =>
-                                    preinit_cnt <= "001";
-                                    expected_resp <= CST_RESP_00B;
-                                    ptr_Rom <= CST_PTR_SET_A0;
-                                    treat <= CST_TREAT_READ_NOTHING;
-                                    Sending_State <= SENDING_DATA;
-                                when "001" =>
-                                    preinit_cnt <= "010";
-                                    expected_resp <= CST_RESP_00B;
-                                    ptr_Rom <= CST_PTR_SET_B0;
-                                    treat <= CST_TREAT_READ_NOTHING;
-                                    Sending_State <= SENDING_DATA;
-                                when "010" =>
-                                    preinit_cnt <= "011";
-                                    expected_resp <= CST_RESP_08B;
-                                    ptr_Rom <= CST_PTR_READ_A;
-                                    treat <= CST_TREAT_READ_A;
-                                    Sending_State <= SENDING_DATA;
-                                when "011" =>
-                                    preinit_cnt <= "100";
-                                    expected_resp <= CST_RESP_08B;
-                                    ptr_Rom <= CST_PTR_READ_B;
-                                    treat <= CST_TREAT_READ_B;
-                                    Sending_State <= SENDING_DATA;
-                                when others =>
+--                          case preinit_cnt is
+--                              when "000" =>
+--                                  preinit_cnt <= "001";
+--                                  expected_resp <= CST_RESP_00B;
+--                                  ptr_Rom <= CST_PTR_SET_A0;
+--                                  treat <= CST_TREAT_READ_NOTHING;
+--                                  Sending_State <= SENDING_DATA;
+--                              when "001" =>
+--                                  preinit_cnt <= "010";
+--                                  expected_resp <= CST_RESP_00B;
+--                                  ptr_Rom <= CST_PTR_SET_B0;
+--                                  treat <= CST_TREAT_READ_NOTHING;
+--                                  Sending_State <= SENDING_DATA;
+--                              when "010" =>
+--                                  preinit_cnt <= "011";
+--                                  expected_resp <= CST_RESP_08B;
+--                                  ptr_Rom <= CST_PTR_READ_A;
+--                                  treat <= CST_TREAT_READ_A;
+--                                  Sending_State <= SENDING_DATA;
+--                              when "011" =>
+--                                  preinit_cnt <= "100";
+--                                  expected_resp <= CST_RESP_08B;
+--                                  ptr_Rom <= CST_PTR_READ_B;
+--                                  treat <= CST_TREAT_READ_B;
+--                                  Sending_State <= SENDING_DATA;
+--                              when others =>
                                     expected_resp <= CST_RESP_60B;
                                     ptr_Rom <= CST_PTR_READ_STATUS;
                                     treat <= CST_TREAT_READ_STATUS;
                                     Sending_State <= SENDING_DATA;
-                            end case;
+--                          end case;
                         end if;
                     end if;
                 when SENDING_DATA =>
