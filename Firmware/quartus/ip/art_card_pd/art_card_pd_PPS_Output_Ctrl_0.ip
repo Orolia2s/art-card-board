@@ -1,4 +1,17 @@
 <?xml version="1.0" ?>
+<!--Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details, at
+https://fpgasoftware.intel.com/eula.-->
 <ipxact:component xmlns:altera="http://www.altera.com/XMLSchema/IPXact2014/extensions" xmlns:ipxact="http://www.accellera.org/XMLSchema/IPXACT/1685-2014">
   <ipxact:vendor>Herve Echelard</ipxact:vendor>
   <ipxact:library>art_card_pd_PPS_Output_Ctrl_0</ipxact:library>
@@ -7,10 +20,10 @@
   <ipxact:busInterfaces>
     <ipxact:busInterface>
       <ipxact:name>avalon_slave_0</ipxact:name>
-      <ipxact:busType vendor="altera" library="altera" name="avalon" version="21.1"></ipxact:busType>
+      <ipxact:busType vendor="intel" library="intel" name="avalon" version="22.4"></ipxact:busType>
       <ipxact:abstractionTypes>
         <ipxact:abstractionType>
-          <ipxact:abstractionRef vendor="altera" library="altera" name="avalon" version="21.1"></ipxact:abstractionRef>
+          <ipxact:abstractionRef vendor="intel" library="intel" name="avalon" version="22.4"></ipxact:abstractionRef>
           <ipxact:portMaps>
             <ipxact:portMap>
               <ipxact:logicalPort>
@@ -288,10 +301,10 @@
     </ipxact:busInterface>
     <ipxact:busInterface>
       <ipxact:name>rst_200mhz</ipxact:name>
-      <ipxact:busType vendor="altera" library="altera" name="reset" version="21.1"></ipxact:busType>
+      <ipxact:busType vendor="intel" library="intel" name="reset" version="22.4"></ipxact:busType>
       <ipxact:abstractionTypes>
         <ipxact:abstractionType>
-          <ipxact:abstractionRef vendor="altera" library="altera" name="reset" version="21.1"></ipxact:abstractionRef>
+          <ipxact:abstractionRef vendor="intel" library="intel" name="reset" version="22.4"></ipxact:abstractionRef>
           <ipxact:portMaps>
             <ipxact:portMap>
               <ipxact:logicalPort>
@@ -320,10 +333,10 @@
     </ipxact:busInterface>
     <ipxact:busInterface>
       <ipxact:name>clock_200mhz</ipxact:name>
-      <ipxact:busType vendor="altera" library="altera" name="clock" version="21.1"></ipxact:busType>
+      <ipxact:busType vendor="intel" library="intel" name="clock" version="22.4"></ipxact:busType>
       <ipxact:abstractionTypes>
         <ipxact:abstractionType>
-          <ipxact:abstractionRef vendor="altera" library="altera" name="clock" version="21.1"></ipxact:abstractionRef>
+          <ipxact:abstractionRef vendor="intel" library="intel" name="clock" version="22.4"></ipxact:abstractionRef>
           <ipxact:portMaps>
             <ipxact:portMap>
               <ipxact:logicalPort>
@@ -357,10 +370,10 @@
     </ipxact:busInterface>
     <ipxact:busInterface>
       <ipxact:name>clock_cpu</ipxact:name>
-      <ipxact:busType vendor="altera" library="altera" name="clock" version="21.1"></ipxact:busType>
+      <ipxact:busType vendor="intel" library="intel" name="clock" version="22.4"></ipxact:busType>
       <ipxact:abstractionTypes>
         <ipxact:abstractionType>
-          <ipxact:abstractionRef vendor="altera" library="altera" name="clock" version="21.1"></ipxact:abstractionRef>
+          <ipxact:abstractionRef vendor="intel" library="intel" name="clock" version="22.4"></ipxact:abstractionRef>
           <ipxact:portMaps>
             <ipxact:portMap>
               <ipxact:logicalPort>
@@ -394,10 +407,10 @@
     </ipxact:busInterface>
     <ipxact:busInterface>
       <ipxact:name>reset_cpu</ipxact:name>
-      <ipxact:busType vendor="altera" library="altera" name="reset" version="21.1"></ipxact:busType>
+      <ipxact:busType vendor="intel" library="intel" name="reset" version="22.4"></ipxact:busType>
       <ipxact:abstractionTypes>
         <ipxact:abstractionType>
-          <ipxact:abstractionRef vendor="altera" library="altera" name="reset" version="21.1"></ipxact:abstractionRef>
+          <ipxact:abstractionRef vendor="intel" library="intel" name="reset" version="22.4"></ipxact:abstractionRef>
           <ipxact:portMaps>
             <ipxact:portMap>
               <ipxact:logicalPort>
@@ -426,10 +439,10 @@
     </ipxact:busInterface>
     <ipxact:busInterface>
       <ipxact:name>irq_pps</ipxact:name>
-      <ipxact:busType vendor="altera" library="altera" name="interrupt" version="21.1"></ipxact:busType>
+      <ipxact:busType vendor="intel" library="intel" name="interrupt" version="22.4"></ipxact:busType>
       <ipxact:abstractionTypes>
         <ipxact:abstractionType>
-          <ipxact:abstractionRef vendor="altera" library="altera" name="interrupt" version="21.1"></ipxact:abstractionRef>
+          <ipxact:abstractionRef vendor="intel" library="intel" name="interrupt" version="22.4"></ipxact:abstractionRef>
           <ipxact:portMaps>
             <ipxact:portMap>
               <ipxact:logicalPort>
@@ -478,10 +491,10 @@
     </ipxact:busInterface>
     <ipxact:busInterface>
       <ipxact:name>PPS_Out</ipxact:name>
-      <ipxact:busType vendor="altera" library="altera" name="conduit" version="21.1"></ipxact:busType>
+      <ipxact:busType vendor="intel" library="intel" name="conduit" version="22.4"></ipxact:busType>
       <ipxact:abstractionTypes>
         <ipxact:abstractionType>
-          <ipxact:abstractionRef vendor="altera" library="altera" name="conduit" version="21.1"></ipxact:abstractionRef>
+          <ipxact:abstractionRef vendor="intel" library="intel" name="conduit" version="22.4"></ipxact:abstractionRef>
           <ipxact:portMaps>
             <ipxact:portMap>
               <ipxact:logicalPort>
@@ -515,10 +528,10 @@
     </ipxact:busInterface>
     <ipxact:busInterface>
       <ipxact:name>PPS_Ref</ipxact:name>
-      <ipxact:busType vendor="altera" library="altera" name="conduit" version="21.1"></ipxact:busType>
+      <ipxact:busType vendor="intel" library="intel" name="conduit" version="22.4"></ipxact:busType>
       <ipxact:abstractionTypes>
         <ipxact:abstractionType>
-          <ipxact:abstractionRef vendor="altera" library="altera" name="conduit" version="21.1"></ipxact:abstractionRef>
+          <ipxact:abstractionRef vendor="intel" library="intel" name="conduit" version="22.4"></ipxact:abstractionRef>
           <ipxact:portMaps>
             <ipxact:portMap>
               <ipxact:logicalPort>
@@ -552,10 +565,10 @@
     </ipxact:busInterface>
     <ipxact:busInterface>
       <ipxact:name>time_clock</ipxact:name>
-      <ipxact:busType vendor="altera" library="altera" name="conduit" version="21.1"></ipxact:busType>
+      <ipxact:busType vendor="intel" library="intel" name="conduit" version="22.4"></ipxact:busType>
       <ipxact:abstractionTypes>
         <ipxact:abstractionType>
-          <ipxact:abstractionRef vendor="altera" library="altera" name="conduit" version="21.1"></ipxact:abstractionRef>
+          <ipxact:abstractionRef vendor="intel" library="intel" name="conduit" version="22.4"></ipxact:abstractionRef>
           <ipxact:portMaps>
             <ipxact:portMap>
               <ipxact:logicalPort>
@@ -842,10 +855,15 @@
     </altera:altera_module_parameters>
     <altera:altera_system_parameters>
       <ipxact:parameters>
+        <ipxact:parameter parameterId="board" type="string">
+          <ipxact:name>board</ipxact:name>
+          <ipxact:displayName>Board</ipxact:displayName>
+          <ipxact:value>default</ipxact:value>
+        </ipxact:parameter>
         <ipxact:parameter parameterId="device" type="string">
           <ipxact:name>device</ipxact:name>
           <ipxact:displayName>Device</ipxact:displayName>
-          <ipxact:value>10CX220YF672I5G</ipxact:value>
+          <ipxact:value>10CX105YF672I5G</ipxact:value>
         </ipxact:parameter>
         <ipxact:parameter parameterId="deviceFamily" type="string">
           <ipxact:name>deviceFamily</ipxact:name>

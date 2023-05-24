@@ -226,7 +226,7 @@ architecture rtl of art_card_Top is
         );
     end component art_card_pd;
 
-    constant CST_FIRMWARE_VERSION:  std_logic_vector(31 downto 0) := x"0000000F";
+    constant CST_FIRMWARE_VERSION:  std_logic_vector(31 downto 0) := x"00000010";
 
     signal eeprom_sda_out: std_logic;
     signal eeprom_scl_out: std_logic;
